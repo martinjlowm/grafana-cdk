@@ -1,5 +1,5 @@
+import type { DataSourceRef, GridPos, Panel as IPanel, RowPanel as IRowPanel } from '@grafana/schema';
 import { Construct } from 'constructs';
-import type { Panel as IPanel, RowPanel as IRowPanel, DataSourceRef, GridPos,  } from '@grafana/schema';
 
 type PanelProps = {
   collapsed: boolean;
@@ -29,9 +29,5 @@ export class RowPanel extends Construct implements IRowPanel {
     this.repeat = props.repeat;
     this.title = props.title;
     this.panels = props.panels || [];
-  }
-
-  toJSON() {
-    return JSON.stringify(this);
   }
 }

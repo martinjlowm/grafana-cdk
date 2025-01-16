@@ -48,7 +48,7 @@
             };
           };
 
-          pre-commit.hooks = {
+          git-hooks.hooks = {
             alejandra.enable = true;
             statix = {
               enable = true;
