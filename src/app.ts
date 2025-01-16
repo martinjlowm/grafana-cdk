@@ -1,7 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { Construct, IConstruct, Node } from 'constructs';
-import { Dashboard } from './dashboard';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { Construct, type IConstruct, type Node } from 'constructs';
+import { Dashboard } from '#@/dashboard';
 
 export interface AppProps {
   readonly outdir?: string;
@@ -11,8 +11,10 @@ class SynthRequestCache {
   public nodeChildrenCache: Map<Node, IConstruct[]> = new Map<Node, IConstruct[]>();
 
   public findAll(node: Node): IConstruct[] {
-    if (this.nodeChildrenCache.has(node)) {
-      return this.nodeChildrenCache.get(node)!;
+    const child = this.nodeChildrenCache.get(node);
+
+    if (child) {
+      return child;
     }
 
     const children = node.findAll();
@@ -22,9 +24,7 @@ class SynthRequestCache {
 }
 
 export class App extends Construct {
-
   public static of(c: IConstruct): App {
-
     const scope = c.node.scope;
 
     if (!scope) {
@@ -42,7 +42,8 @@ export class App extends Construct {
   }
 
   constructor(props: AppProps = {}) {
-    super(undefined as any, '');
+    // @ts-ignore
+    super(undefined, '');
     this.outdir = props.outdir ?? 'dist';
   }
 
@@ -59,7 +60,6 @@ export class App extends Construct {
       fs.writeFileSync(path.join(this.outdir, `${dashboard.title}.json`), dashboard.toJSON());
     }
   }
-
 }
 
 function validate(app: App, cache: SynthRequestCache) {

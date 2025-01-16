@@ -47,7 +47,7 @@ in
     installPhase = ''
       mkdir -p $out
 
-      ${_jq} '.imports."#@/*" |= ["./dist/*", "./dist/*.js"]' package.json > $out/package.json
+      ${_jq} '.imports."#@/*" |= ["./dist/*", "./dist/*.js"]' package.json | ${_jq} 'del(.workspaces)' > $out/package.json
       mv dist $out/
       mv README.md $out/
       mv .npmrc $out/
