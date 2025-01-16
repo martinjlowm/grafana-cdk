@@ -6,7 +6,7 @@ Code, IaC.
 ## Installation
 
 ```bash
-npm i --save-dev @martinjlowm/grafana-cdk
+$embed: ./snippets/install-package.sh$
 ```
 
 ## Usage
