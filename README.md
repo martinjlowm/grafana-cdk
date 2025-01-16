@@ -154,7 +154,7 @@ dashboard.addPanel(
 app.synth();
 ```
 
-## Contribution
+## Contributing
 
 Install Nix and enter the development shell,
 

@@ -18,7 +18,7 @@ models for all the defined dashboards.
 $embed: ./snippets/dashboard.ts$
 ```
 
-## Contribution
+## Contributing
 
 Install Nix and enter the development shell,
 
