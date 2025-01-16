@@ -11,6 +11,9 @@ npm i --save-dev @martinjlowm/grafana-cdk
 
 ## Usage
 
+Define your dashboards like the following as a Node.js script to emit JSON
+models for all the defined dashboards.
+
 ```typescript
 import {
   App,

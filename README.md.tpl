@@ -11,6 +11,9 @@ $embed: ./snippets/install-package.sh$
 
 ## Usage
 
+Define your dashboards like the following as a Node.js script to emit JSON
+models for all the defined dashboards.
+
 ```typescript
 $embed: ./snippets/dashboard.ts$
 ```
