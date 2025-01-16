@@ -69,7 +69,7 @@
               enable = true;
               name = "README.md";
               entry = ''bash -c "snippets README.md.tpl > README.md"'';
-              files = "README.md.tpl";
+              files = "(README.md.tpl|snippets/.*)";
             };
           };
         }

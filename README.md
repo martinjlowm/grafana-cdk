@@ -147,6 +147,8 @@ dashboard.addPanel(
     ],
   }),
 );
+
+app.synth();
 ```
 
 ## Contribution

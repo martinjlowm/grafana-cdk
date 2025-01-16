@@ -133,3 +133,5 @@ dashboard.addPanel(
     ],
   }),
 );
+
+app.synth();
