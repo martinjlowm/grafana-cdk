@@ -1,17 +1,3 @@
-# Grafana CDK
-
-Grafana CDK constructs for defining dashboards as Typesafe Infrastructure as
-Code, IaC.
-
-## Installation
-
-```bash
-npm i --save-dev @martinjlowm/grafana-cdk
-```
-
-## Usage
-
-```typescript
 import {
   App,
   CloudWatchDataSource,
@@ -147,14 +133,3 @@ dashboard.addPanel(
     ],
   }),
 );
-```
-
-## Contribution
-
-Install Nix and enter the development shell,
-
-```bash
-nix develop --impure
-```
-
-or simply `direnv allow` if you have direnv installed.

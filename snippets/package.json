@@ -1,0 +1,8 @@
+{
+  "name": "@martinjlowm/grafana-cdk-snippets",
+  "devDependencies": {
+    "@martinjlowm/grafana-cdk": "workspace:^",
+    "@types/node": "^22.10.7",
+    "typescript": "^5.7.3"
+  }
+}
