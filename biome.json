@@ -1,0 +1,24 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
+  "files": {
+    "ignore": [".yarn/*", ".pnp.*"]
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "origin/master"
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  }
+}

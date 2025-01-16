@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders scorecards 1`] = `
+"{
+  "version": 0,
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "schemaVersion": 0,
+  "tags": [],
+  "time": {
+    "from": "",
+    "to": ""
+  },
+  "title": "Scorecards",
+  "panels": [],
+  "timepicker": {}
+}"
+`;

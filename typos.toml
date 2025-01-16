@@ -1,0 +1,9 @@
+[default]
+
+[files]
+extend-exclude = [
+  ".yarn",
+  ".pnp.*",
+]
+
+ignore-hidden = false
