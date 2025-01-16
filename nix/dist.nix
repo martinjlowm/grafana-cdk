@@ -11,22 +11,21 @@
   _jq = "${jq}/bin/jq";
 in
   stdenvNoCC.mkDerivation {
-    name = "drata-cdk-stackset-${version}";
+    name = "grafana-cdk-${version}";
 
     src = lib.fileset.toSource {
       root = ../.;
       fileset = lib.fileset.unions [
         ../src
         ../package.json
+        ../.npmrc
         ../tsconfig.json
         ../yarn.lock
         ../.yarnrc.yml
         ../.yarn/releases
         ../.yarn/sdks
-        ../.pnp.cjs
-        ../.pnp.loader.mjs
-        ../.npmrc
         ../README.md
+        ../snippets
       ];
     };
 
@@ -55,8 +54,8 @@ in
     '';
 
     meta = with lib; {
-      homepage = "https://github.com/FactbirdHQ/drata-cdk-stackset";
-      description = "A CDK construct derived from Drata's official template at https://github.com/drata/aws-cloudformation-drata-setup";
+      homepage = "https://github.com/martinjlowm/grafana-cdk";
+      description = "Grafana CDK constructs for defining dashboards as typesafe Infrastructure as Code, IaC.";
       platforms = platforms.linux ++ platforms.darwin;
     };
   }

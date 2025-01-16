@@ -1,6 +1,6 @@
 # Grafana CDK
 
-Grafana CDK constructs for defining dashboards as Typesafe Infrastructure as
+Grafana CDK constructs for defining dashboards as typesafe Infrastructure as
 Code, IaC.
 
 ## Installation
