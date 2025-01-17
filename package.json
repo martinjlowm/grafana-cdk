@@ -24,6 +24,9 @@
     "#@/*": {
       "development": ["./src/*", "./src/*.ts"],
       "default": ["./dist/*", "./dist/*.js"]
+    },
+    "#$/*": {
+      "default": ["./test/*", "./test/*.ts"]
     }
   },
   "scripts": {

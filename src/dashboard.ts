@@ -44,7 +44,7 @@ export class Dashboard extends Construct implements IDashboard {
   public readonly time?: TimeRange;
   public readonly timepicker?: TimePickerConfig;
   public readonly timezone?: string;
-  public readonly title?: string;
+  public readonly title: string;
   public readonly uid?: string;
   public readonly version: number;
   public readonly weekStart?: string;
@@ -55,8 +55,8 @@ export class Dashboard extends Construct implements IDashboard {
 
     this.annotations = {
       list: [
-        new AnnotationQuery(scope, 'annotations-alerts', {
-          datasource: new GrafanaDataSource(scope),
+        new AnnotationQuery(this, 'annotations-alerts', {
+          datasource: new GrafanaDataSource(this),
           name: 'Annotations & Alerts',
           type: 'dashboard',
         }),
