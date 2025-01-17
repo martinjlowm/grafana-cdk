@@ -1,6 +1,7 @@
 {
   "name": "@martinjlowm/grafana-cdk",
   "version": "0.0.1",
+  "type": "module",
   "workspaces": ["snippets"],
   "repository": {
     "type": "git",

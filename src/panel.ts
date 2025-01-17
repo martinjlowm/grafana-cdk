@@ -4,6 +4,8 @@ import { Construct } from 'constructs';
 import type { DashboardLink } from '#@/dashboard-link.js';
 import type { DataSource } from '#@/data-source.js';
 import type { DataTransformer } from '#@/data-transformer.js';
+import { FieldConfig, type FieldConfigProps } from '#@/field-config.js';
+import { GridPosition } from '#@/grid-position.js';
 import type { LibraryPanel } from '#@/library-panel.js';
 
 // zod this
@@ -13,8 +15,8 @@ type PanelProps = {
   cacheTimeout?: string;
   datasource?: DataSource;
   description?: string;
-  fieldConfig?: FieldConfigSource;
-  gridPos?: GridPos;
+  fieldConfig?: FieldConfigProps;
+  gridPos: Omit<GridPos, 'x' | 'y'> & Partial<GridPos>;
   hideTimeOverride?: boolean;
   id?: number;
   interval?: string;
@@ -45,7 +47,7 @@ export class Panel extends Construct implements IPanel {
 
   public readonly cacheTimeout?: string;
   public readonly fieldConfig?: FieldConfigSource;
-  public readonly gridPos?: GridPos;
+  public readonly gridPos: GridPos;
   public readonly hideTimeOverride?: boolean;
   public readonly id?: number;
   public readonly interval?: string;
@@ -68,7 +70,8 @@ export class Panel extends Construct implements IPanel {
   constructor(scope: Construct, id: string, props: PanelProps) {
     super(scope, id);
 
-    this.gridPos = props.gridPos;
+    // Pass through GridPosition such that we can validate positions and that panels don't overlap
+    this.gridPos = new GridPosition(this, id, props.gridPos);
     this.title = props.title || '';
     this.type = props.type;
 
@@ -80,7 +83,7 @@ export class Panel extends Construct implements IPanel {
     this.cacheTimeout = props.cacheTimeout;
     this.datasource = props.datasource;
     this.description = props.description;
-    this.fieldConfig = props.fieldConfig;
+    this.fieldConfig = new FieldConfig(this, 'field-config', props.fieldConfig);
 
     this.hideTimeOverride = props.hideTimeOverride;
     this.interval = props.interval;

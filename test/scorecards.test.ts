@@ -1,4 +1,4 @@
-import { App, CloudWatchDataSource, Dashboard, FieldColorModeId, Panel, ThresholdsMode } from '#@/index.js';
+import { App, CloudWatchDataSource, Dashboard, Panel } from '#@/index.js';
 
 it('renders scorecards', () => {
   const app = new App();
@@ -19,36 +19,9 @@ it('renders scorecards', () => {
       type: 'stat',
       datasource: cloudwatch,
       fieldConfig: {
-        defaults: {
-          color: {
-            mode: FieldColorModeId.Thresholds,
-          },
-          decimals: 1,
-          mappings: [],
-          thresholds: {
-            mode: ThresholdsMode.Absolute,
-            steps: [
-              {
-                color: 'green',
-                value: null,
-              },
-              {
-                color: 'red',
-                value: 5000,
-              },
-            ],
-          },
-          unit: 'ms',
-        },
-        overrides: [],
+        unit: 'ms',
       },
-      gridPos: {
-        h: 4,
-        w: 4,
-        x: 0,
-        y: 0,
-      },
-      id: 15,
+      gridPos: { h: 4, w: 4 },
       options: {
         colorMode: 'value',
         graphMode: 'area',

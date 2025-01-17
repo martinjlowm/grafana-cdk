@@ -15,15 +15,15 @@
   } @ inputs: let
     system = builtins.currentSystem;
     pkgs = nixpkgs.legacyPackages.${system};
-    node = pkgs.nodejs_23;
+    nodejs = pkgs.nodejs_23;
   in {
     devShell.${system} = devenv.lib.mkShell {
       inherit inputs pkgs;
       modules = [
         {
           packages = [
-            node
-            pkgs.nodePackages_latest.yarn
+            nodejs
+            (pkgs.yarn-berry.override {inherit nodejs;})
           ];
 
           scripts = {
@@ -43,7 +43,7 @@
                     return fs.readFileSync(snippet).toString().trim();
                 }));
               '';
-              package = node;
+              package = nodejs;
               binary = "node";
             };
           };

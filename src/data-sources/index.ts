@@ -1,2 +1,2 @@
-export * from './cloudwatch';
-export * from './grafana';
+export * from './cloudwatch.js';
+export * from './grafana.js';

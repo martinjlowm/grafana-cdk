@@ -3,7 +3,7 @@
   "include": ["*.ts"],
   "compilerOptions": {
     "target": "es2022",
-    "rootDir": ".",
+    "rootDir": "..",
     "types": ["node", "jest"],
     "lib": ["es2022"]
   }
