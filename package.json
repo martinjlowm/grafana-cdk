@@ -2,7 +2,7 @@
   "name": "@martinjlowm/grafana-cdk",
   "version": "0.0.1",
   "type": "module",
-  "workspaces": ["snippets"],
+  "workspaces": ["docs/snippets"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/martinjlowm/grafana-cdk.git"
