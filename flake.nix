@@ -33,15 +33,18 @@
             '';
             snippets = {
               exec = ''
-                const fs = require('fs');
+                const fs = require('node:fs');
+                const path = require('node:path');
 
                 const [,, filename] = process.argv;
-
+                const sourcePath = path.resolve('.', path.dirname(filename));
                 const contents = fs.readFileSync(filename).toString();
 
-                process.stdout.write(contents.replace(/\$embed: (.+)\$/g, (_, snippet) => {
-                    return fs.readFileSync(snippet).toString().trim();
-                }));
+                process.stdout.write(
+                  contents.replace(/\$embed: (.+)\$/g, (_, snippet) => {
+                    return fs.readFileSync(path.resolve(sourcePath, snippet)).toString().trim();
+                  })
+                );
               '';
               package = nodejs;
               binary = "node";
@@ -68,8 +71,8 @@
             readme = {
               enable = true;
               name = "README.md";
-              entry = ''bash -c "snippets README.md.tpl > README.md"'';
-              files = "(README.md.tpl|snippets/.*)";
+              entry = ''bash -c "snippets docs/README.tpl.md > README.md"'';
+              files = "(docs\/README.md.tpl|docs\/snippets\/.*)";
             };
           };
         }

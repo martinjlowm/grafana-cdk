@@ -15,14 +15,7 @@ Define your dashboards like the following as a Node.js script to emit JSON
 models for all the defined dashboards.
 
 ```typescript
-import {
-  App,
-  CloudWatchDataSource,
-  Dashboard,
-  FieldColorModeId,
-  Panel,
-  ThresholdsMode,
-} from '@martinjlowm/grafana-cdk';
+import { App, CloudWatchDataSource, Dashboard, Panel } from '@martinjlowm/grafana-cdk';
 
 const app = new App();
 const dashboard = new Dashboard(app, 'scorecards', {
@@ -42,36 +35,9 @@ dashboard.addPanel(
     type: 'stat',
     datasource: cloudwatch,
     fieldConfig: {
-      defaults: {
-        color: {
-          mode: FieldColorModeId.Thresholds,
-        },
-        decimals: 1,
-        mappings: [],
-        thresholds: {
-          mode: ThresholdsMode.Absolute,
-          steps: [
-            {
-              color: 'green',
-              value: null,
-            },
-            {
-              color: 'red',
-              value: 5000,
-            },
-          ],
-        },
-        unit: 'ms',
-      },
-      overrides: [],
+      unit: 'ms',
     },
-    gridPos: {
-      h: 4,
-      w: 4,
-      x: 0,
-      y: 0,
-    },
-    id: 15,
+    gridPos: { h: 4, w: 4 },
     options: {
       colorMode: 'value',
       graphMode: 'area',
@@ -92,7 +58,7 @@ dashboard.addPanel(
         accountId: 'all',
         datasource: cloudwatch,
         dimensions: {
-          ApiName: 'api-name',
+          ApiName: 'prod-ms-graphql-gateway',
         },
         expression: '',
         id: '',
@@ -117,7 +83,7 @@ dashboard.addPanel(
           uid: 'ddocearsutibke',
         },
         dimensions: {
-          ApiName: 'api-name-regional',
+          ApiName: 'prod-ms-graphql-gateway-regional',
         },
         expression: '',
         hide: false,
