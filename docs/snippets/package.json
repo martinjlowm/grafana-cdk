@@ -1,5 +1,6 @@
 {
   "name": "@martinjlowm/grafana-cdk-snippets",
+  "type": "module",
   "devDependencies": {
     "@martinjlowm/grafana-cdk": "workspace:^",
     "@types/node": "^22.10.7",
