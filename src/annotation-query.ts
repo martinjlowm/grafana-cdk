@@ -8,7 +8,7 @@ import { Construct } from 'constructs';
 
 import type { DataSource } from '#@/data-source';
 
-type PanelProps = {
+type AnnotationQueryProps = {
   datasource?: DataSource | null;
   snapshotData?: unknown;
   builtIn?: number;
@@ -34,7 +34,7 @@ export class AnnotationQuery<TQuery extends DataQuery = DataQuery> extends Const
   public readonly target?: TQuery;
   public readonly type?: string;
 
-  constructor(scope: Construct, id: string, props: PanelProps) {
+  constructor(scope: Construct, id: string, props: AnnotationQueryProps) {
     super(scope, id);
 
     this.builtIn = props.builtIn || 1;
