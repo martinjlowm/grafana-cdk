@@ -1,4 +1,9 @@
-import type { DashboardCursorSync, DashboardLink, Dashboard as IDashboard, TimePickerConfig } from '@grafana/schema';
+import type {
+  DashboardCursorSync,
+  DashboardLink,
+  Dashboard as GrafanaDashboard,
+  TimePickerConfig,
+} from '@grafana/schema';
 import { Construct } from 'constructs';
 
 import { AnnotationQuery } from '#@/annotation-query.js';
@@ -30,6 +35,12 @@ type DashboardProps = {
   weekStart?: string;
   templating?: IDashboard['templating'];
 };
+
+type ExcludeDashboardProperties =
+  // This is not properly typed upstream
+  'panels';
+
+export type IDashboard = Omit<GrafanaDashboard, ExcludeDashboardProperties>;
 
 export class Dashboard extends Construct implements IDashboard {
   public readonly annotations: IDashboard['annotations'];

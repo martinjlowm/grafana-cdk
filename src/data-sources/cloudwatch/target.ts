@@ -1,6 +1,4 @@
-import { Construct } from 'constructs';
-
-import type { IDataSourceTarget } from '#@/data-source.js';
+import { DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.js';
 import type { CloudWatchDataSource } from '#@/data-sources/cloudwatch/data-source.js';
 
 interface Dimensions {
@@ -42,9 +40,8 @@ export type CloudWatchDataSourceTargetProps = {
 };
 // Create this from the data source to sync the datasource reference
 //Ggotta figure out the nature of the redundant data source references
-export class CloudWatchDataSourceTarget extends Construct implements IDataSourceTarget {
+export class CloudWatchDataSourceTarget extends DataSourceTarget {
   accountId: string;
-  datasource: CloudWatchDataSource;
   dimensions: Dimensions;
   expression: string;
   id: string;
@@ -57,14 +54,16 @@ export class CloudWatchDataSourceTarget extends Construct implements IDataSource
   namespace: AWSNamespace;
   period: string;
   queryMode: string;
-  refId: string;
   region: Region;
   sqlExpression: string;
   statistic: Statistic;
-  hide: boolean;
 
-  constructor(scope: CloudWatchDataSource, uid: string, props: CloudWatchDataSourceTargetProps) {
-    super(scope, `cloudwatch-data-source-target-${uid}`);
+  constructor(
+    scope: CloudWatchDataSource,
+    uid: string,
+    { hide, refId, ...props }: DataSourceTargetProps & CloudWatchDataSourceTargetProps,
+  ) {
+    super(scope, uid, { hide, refId });
 
     this.accountId = props.accountId || 'all';
     this.datasource = scope;
@@ -80,14 +79,8 @@ export class CloudWatchDataSourceTarget extends Construct implements IDataSource
     this.namespace = props.namespace;
     this.period = `${props.period}`;
     this.queryMode = props.queryMode;
-    this.refId = props.refId;
     this.region = props.region || 'default';
     this.sqlExpression = props.sqlExpression || '';
     this.statistic = props.statistic;
-    this.hide = props.hide ?? false;
-  }
-
-  asRef() {
-    return this.refId;
   }
 }

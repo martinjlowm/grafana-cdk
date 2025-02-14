@@ -78,11 +78,13 @@ exports[`renders scorecards 1`] = `
       "pluginVersion": "10.4.1",
       "targets": [
         {
-          "accountId": "all",
+          "hide": false,
           "datasource": {
             "type": "cloudwatch",
             "uid": "ddocearsutibke"
           },
+          "refId": "A",
+          "accountId": "all",
           "dimensions": {
             "ApiName": "prod-ms-graphql-gateway"
           },
@@ -97,22 +99,22 @@ exports[`renders scorecards 1`] = `
           "namespace": "AWS/ApiGateway",
           "period": "86400",
           "queryMode": "Metrics",
-          "refId": "A",
           "region": "default",
           "sqlExpression": "",
           "statistic": "p99"
         },
         {
-          "accountId": "all",
+          "hide": false,
           "datasource": {
             "type": "cloudwatch",
             "uid": "ddocearsutibke"
           },
+          "refId": "B",
+          "accountId": "all",
           "dimensions": {
             "ApiName": "prod-ms-graphql-gateway-regional"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -123,20 +125,19 @@ exports[`renders scorecards 1`] = `
           "namespace": "AWS/ApiGateway",
           "period": "86400",
           "queryMode": "Metrics",
-          "refId": "B",
           "region": "default",
           "sqlExpression": "",
           "statistic": "p99"
         },
         {
+          "hide": false,
           "datasource": {
             "name": "Expression",
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$A + $B",
-          "hide": false,
           "refId": "C",
+          "expression": "$A + $B",
           "type": "math"
         }
       ]

@@ -1,8 +1,8 @@
-import type { FieldConfigSource, GridPos, Panel as IPanel } from '@grafana/schema';
+import type { FieldConfigSource, Panel as GrafanaPanel, GridPos } from '@grafana/schema';
 import { Construct } from 'constructs';
 
 import type { DashboardLink } from '#@/dashboard-link.js';
-import type { DataSource, IDataSourceTarget } from '#@/data-source.js';
+import type { DataSource, DataSourceTarget } from '#@/data-source.js';
 import type { DataTransformer } from '#@/data-transformer.js';
 import { FieldConfig, type FieldConfigProps } from '#@/field-config.js';
 import { GridPosition } from '#@/grid-position.js';
@@ -36,7 +36,7 @@ type PanelProps = {
   repeatDirection?: IPanel['repeatDirection'];
   // Datasource target - must be inferred
   // targets?: IPanel['targets'];
-  targets?: Array<IDataSourceTarget>;
+  targets?: Array<DataSourceTarget>;
   timeFrom?: TimeRangeString;
   timeShift?: TimeRangeString;
   title?: string;
@@ -44,6 +44,12 @@ type PanelProps = {
   transparent?: boolean;
   type: string;
 };
+
+type ExcludePanelProperties =
+  // This is not properly typed upstream
+  'targets';
+
+export type IPanel = Omit<GrafanaPanel, ExcludePanelProperties>;
 
 export class Panel extends Construct implements IPanel {
   public readonly title?: string;
@@ -67,7 +73,7 @@ export class Panel extends Construct implements IPanel {
   public readonly queryCachingTTL?: number;
   public readonly repeat?: string;
   public readonly repeatDirection?: IPanel['repeatDirection'];
-  public readonly targets?: IPanel['targets'];
+  public readonly targets?: Array<DataSourceTarget>;
   public readonly timeFrom?: string;
   public readonly timeShift?: string;
 

@@ -1,24 +1,24 @@
-import { Construct } from 'constructs';
+import { type DataSource, DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.js';
 
 export type ExpressionTargetProps = {
-  expression: string;
   refId: string;
+  expression: string;
 };
 
 // Create this from the data source to sync the datasource reference
 // Gotta figure out the nature of the redundant data source references
-export class ExpressionTarget extends Construct {
+export class ExpressionTarget extends DataSourceTarget {
   expression: string;
-  refId: string;
+  type: 'math';
 
-  constructor(scope: Construct, uid: string, props: ExpressionTargetProps) {
-    super(scope, uid);
+  constructor(
+    scope: DataSource,
+    uid: string,
+    { hide, refId, ...props }: DataSourceTargetProps & ExpressionTargetProps,
+  ) {
+    super(scope, uid, { hide, refId });
 
     this.expression = props.expression;
-    this.refId = props.refId;
-  }
-
-  asRef() {
-    return this.refId;
+    this.type = 'math';
   }
 }

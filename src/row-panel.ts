@@ -1,5 +1,7 @@
-import type { DataSourceRef, GridPos, Panel as IPanel, RowPanel as IRowPanel } from '@grafana/schema';
+import type { DataSourceRef, RowPanel as GrafanaRowPanel, GridPos } from '@grafana/schema';
 import { Construct } from 'constructs';
+
+import type { IPanel } from '#@/panel.js';
 
 type PanelProps = {
   collapsed: boolean;
@@ -11,6 +13,12 @@ type PanelProps = {
   title?: string;
   type: 'row';
 };
+
+type ExcludeRowPanelProperties =
+  // This is not properly typed upstream
+  'panels';
+
+export type IRowPanel = Omit<GrafanaRowPanel, ExcludeRowPanelProperties>;
 
 export class RowPanel extends Construct implements IRowPanel {
   public readonly type = 'row';

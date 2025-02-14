@@ -6,6 +6,7 @@ import { ExpressionTarget, type ExpressionTargetProps } from '#@/data-sources/ex
 export class ExpressionDataSource extends DataSource {
   constructor(scope: Construct) {
     super(scope, 'expression-data-source', {
+      name: 'Expression',
       type: '__expr__',
       uid: '__expr__',
     });
