@@ -2,7 +2,7 @@ import type { FieldConfigSource, GridPos, Panel as IPanel } from '@grafana/schem
 import { Construct } from 'constructs';
 
 import type { DashboardLink } from '#@/dashboard-link.js';
-import type { DataSource } from '#@/data-source.js';
+import type { DataSource, IDataSourceTarget } from '#@/data-source.js';
 import type { DataTransformer } from '#@/data-transformer.js';
 import { FieldConfig, type FieldConfigProps } from '#@/field-config.js';
 import { GridPosition } from '#@/grid-position.js';
@@ -24,12 +24,19 @@ type PanelProps = {
   links?: Array<DashboardLink>;
   maxDataPoints?: number;
   maxPerRow?: number;
+  // TODO: Panels can come in a variety of different shapes - we should be able
+  // to infer the Options type:
+  // https://github.com/grafana/grafana/tree/fb3a858726b0ce4c4057053121f5e6b617ca7b2a/packages/grafana-schema/src/raw/composable
   options?: Record<string, unknown>;
+  // Specific to the variant of the panel provided by the plugin
+  // TODO: Statically set this on a separate implementation
   pluginVersion?: string;
   queryCachingTTL?: number;
   repeat?: string;
   repeatDirection?: IPanel['repeatDirection'];
-  targets?: IPanel['targets'];
+  // Datasource target - must be inferred
+  // targets?: IPanel['targets'];
+  targets?: Array<IDataSourceTarget>;
   timeFrom?: TimeRangeString;
   timeShift?: TimeRangeString;
   title?: string;

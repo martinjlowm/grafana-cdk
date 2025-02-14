@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { Construct, type IConstruct, type Node } from 'constructs';
-import { Dashboard } from '#@/dashboard';
+import { Dashboard } from '#@/dashboard.js';
 
 export interface AppProps {
   readonly outdir?: string;

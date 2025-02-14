@@ -1,9 +1,9 @@
 import type { DashboardCursorSync, DashboardLink, Dashboard as IDashboard, TimePickerConfig } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import { AnnotationQuery } from '#@/annotation-query';
-import type { Panel } from '#@/panel';
-import type { RowPanel } from '#@/row-panel';
+import { AnnotationQuery } from '#@/annotation-query.js';
+import type { Panel } from '#@/panel.js';
+import type { RowPanel } from '#@/row-panel.js';
 
 import { GrafanaDataSource } from '#@/data-sources/index.js';
 

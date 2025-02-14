@@ -6,7 +6,7 @@ import type {
 } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import type { DataSource } from '#@/data-source';
+import type { DataSource } from '#@/data-source.js';
 
 type AnnotationQueryProps = {
   datasource?: DataSource | null;

@@ -18,6 +18,7 @@ module.exports = (request, context) => {
     // options.conditions = new Set(['development']);
 
     let filePath;
+
     for (const pattern in imports) {
       const wildStarIndex = pattern.indexOf('*');
       if (wildStarIndex === -1) {
@@ -25,13 +26,16 @@ module.exports = (request, context) => {
       }
 
       const subpath = pattern.substring(0, wildStarIndex);
+
       if (request.startsWith(subpath)) {
         const unprefixedReference = request.replace(subpath, '');
         const subpathConfig = imports[pattern];
         const matchers = subpathConfig.development || subpathConfig.default;
-        for (const matcher of matchers) {
+
+        for (const matcher of Array.isArray(matchers) ? matchers : [matchers]) {
           try {
             const filePathExtensionless = matcher.replace('*', unprefixedReference.replace(/\.[^/.]+$/, ''));
+
             filePath = require.resolve(filePathExtensionless);
             break;
           } catch {}

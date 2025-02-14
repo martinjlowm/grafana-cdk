@@ -1,6 +1,6 @@
 import type { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source';
+import { DataSource } from '#@/data-source.js';
 
 export class GrafanaDataSource extends DataSource {
   constructor(scope: Construct) {

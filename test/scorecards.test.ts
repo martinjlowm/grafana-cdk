@@ -1,4 +1,4 @@
-import { App, CloudWatchDataSource, Dashboard, Panel } from '#@/index.js';
+import { App, CloudWatchDataSource, Dashboard, ExpressionDataSource, Panel } from '#@/index.js';
 
 it('renders scorecards', () => {
   const app = new App();
@@ -12,7 +12,40 @@ it('renders scorecards', () => {
   });
 
   const cloudwatch = new CloudWatchDataSource(app, 'ddocearsutibke');
+  const gatewayLatencyTarget = cloudwatch.createTarget('gateway-latency', {
+    dimensions: {
+      ApiName: 'prod-ms-graphql-gateway',
+    },
+    expression: '',
+    metricName: 'Latency',
+    namespace: 'AWS/ApiGateway',
+    period: 86400,
+    queryMode: 'Metrics',
+    refId: 'A',
+    statistic: 'p99',
+  });
 
+  const regionalGatewayLatencyTarget = cloudwatch.createTarget('regional-gateway-latency', {
+    dimensions: {
+      ApiName: 'prod-ms-graphql-gateway-regional',
+    },
+    expression: '',
+    metricName: 'Latency',
+    namespace: 'AWS/ApiGateway',
+    period: 86400,
+    queryMode: 'Metrics',
+    refId: 'B',
+    statistic: 'p99',
+  });
+
+  const expression = new ExpressionDataSource(app);
+  const expressionTarget = expression.createTarget('add', {
+    expression: `${gatewayLatencyTarget.asRef()} + ${regionalGatewayLatencyTarget.asRef()}`,
+    refId: 'C',
+  });
+
+  // options
+  // targets -> datasource filters?
   dashboard.addPanel(
     new Panel(app, 'p99-api-latency', {
       title: 'API Latency P99',
@@ -37,67 +70,7 @@ it('renders scorecards', () => {
         wideLayout: true,
       },
       pluginVersion: '10.4.1',
-      targets: [
-        {
-          accountId: 'all',
-          datasource: cloudwatch,
-          dimensions: {
-            ApiName: 'prod-ms-graphql-gateway',
-          },
-          expression: '',
-          id: '',
-          label: '',
-          logGroups: [],
-          matchExact: true,
-          metricEditorMode: 0,
-          metricName: 'Latency',
-          metricQueryType: 0,
-          namespace: 'AWS/ApiGateway',
-          period: '86400',
-          queryMode: 'Metrics',
-          refId: 'A',
-          region: 'default',
-          sqlExpression: '',
-          statistic: 'p99',
-        },
-        {
-          accountId: 'all',
-          datasource: {
-            type: 'cloudwatch',
-            uid: 'ddocearsutibke',
-          },
-          dimensions: {
-            ApiName: 'prod-ms-graphql-gateway-regional',
-          },
-          expression: '',
-          hide: false,
-          id: '',
-          label: '',
-          logGroups: [],
-          matchExact: true,
-          metricEditorMode: 0,
-          metricName: 'Latency',
-          metricQueryType: 0,
-          namespace: 'AWS/ApiGateway',
-          period: '86400',
-          queryMode: 'Metrics',
-          refId: 'B',
-          region: 'default',
-          sqlExpression: '',
-          statistic: 'p99',
-        },
-        {
-          datasource: {
-            name: 'Expression',
-            type: '__expr__',
-            uid: '__expr__',
-          },
-          expression: '$A + $B',
-          hide: false,
-          refId: 'C',
-          type: 'math',
-        },
-      ],
+      targets: [gatewayLatencyTarget, regionalGatewayLatencyTarget, expressionTarget],
     }),
   );
 

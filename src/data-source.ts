@@ -1,5 +1,14 @@
-import { Construct } from 'constructs';
 import type { DataSourceRef } from '@grafana/schema';
+import { Construct } from 'constructs';
+
+export type IDataSourceTarget = {
+  datasource: DataSource;
+};
+
+export type IDataSource = {
+  type: string;
+  uid: string;
+};
 
 type DataSourceProps = {
   type: string;
@@ -21,6 +30,6 @@ export class DataSource extends Construct {
     return {
       type: this.type,
       uid: this.uid,
-    }
+    };
   }
 }

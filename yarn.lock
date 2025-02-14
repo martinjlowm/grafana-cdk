@@ -1665,6 +1665,9 @@ __metadata:
     typescript: "npm:^5.7.2"
   peerDependencies:
     constructs: ^10.4.2
+  dependenciesMeta:
+    "@grafana/schema@11.4.0":
+      unplugged: true
   languageName: unknown
   linkType: soft
 

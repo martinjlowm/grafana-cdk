@@ -22,12 +22,19 @@
     }
   },
   "imports": {
+    "#@/*.js": {
+      "development": "./src/*.ts",
+      "default": "./dist/*.js"
+    },
     "#@/*": {
-      "development": ["./src/*", "./src/*.ts"],
-      "default": ["./dist/*", "./dist/*.js"]
+      "development": "./src/*",
+      "default": "./dist/*"
+    },
+    "#$/*.js": {
+      "default": "./test/*.ts"
     },
     "#$/*": {
-      "default": ["./test/*", "./test/*.ts"]
+      "default": "./test/*"
     }
   },
   "scripts": {
@@ -52,5 +59,10 @@
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "typescript": "^5.7.2"
+  },
+  "dependenciesMeta": {
+    "@grafana/schema@11.4.0": {
+      "unplugged": true
+    }
   }
 }
