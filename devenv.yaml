@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://devenv.sh/devenv.schema.json
+inputs:
+  # The release channel, not devenv-nixpkgs/rolling, and pinned to the same
+  # revision as mj-agents so a shell entered here and a shell entered there
+  # resolve the same node/yarn/bun.
+  nixpkgs:
+    url: github:NixOS/nixpkgs/nixos-26.05
+  git-hooks:
+    url: github:cachix/git-hooks.nix
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+  treefmt-nix:
+    url: github:numtide/treefmt-nix
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+
+enableTelemetry: false

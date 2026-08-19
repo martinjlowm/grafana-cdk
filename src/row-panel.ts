@@ -1,41 +1,95 @@
-import type { DataSourceRef, RowPanel as GrafanaRowPanel, GridPos } from '@grafana/schema';
+import type { DataSourceRef, RowPanel as GrafanaRowPanel } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import type { IPanel } from '#@/panel.js';
+import { DataSource } from '#@/data-source.js';
+import { GridPosition } from '#@/grid-position.js';
+import type { AnyPanel } from '#@/panel.js';
 
-type PanelProps = {
-  collapsed: boolean;
-  datasource?: DataSourceRef;
-  gridPos?: GridPos;
-  id: number;
-  panels?: Array<IPanel>;
-  repeat?: string;
+export interface RowPanelProps {
   title?: string;
-  type: 'row';
-};
+  /**
+   * A collapsed row carries its panels inline, in `panels`; an expanded one
+   * leaves them in the dashboard's own list and only marks where the row
+   * header sits. Grafana moves them between the two on expand/collapse, and
+   * this construct emits whichever form matches `collapsed`.
+   */
+  collapsed?: boolean;
+  /** Panels belonging to this row. */
+  panels?: AnyPanel[];
+  /** Default data source for the row's panels. */
+  datasource?: DataSource | DataSourceRef;
+  /** Name of the template variable to repeat this row for. */
+  repeat?: string;
+  /** Unique within the dashboard; assigned by the dashboard when omitted. */
+  id?: number;
+  /** Row of the header. Assigned by the dashboard when omitted. */
+  y?: number;
+}
 
-type ExcludeRowPanelProperties =
-  // This is not properly typed upstream
-  'panels';
+export type IRowPanel = GrafanaRowPanel;
 
-export type IRowPanel = Omit<GrafanaRowPanel, ExcludeRowPanelProperties>;
+/**
+ * A row header, which groups the panels beneath it.
+ *
+ * Rows are full-width and exactly one grid row tall — Grafana ignores anything
+ * else — so unlike a {@link Panel} there is no `gridPos` to pass.
+ */
+export class RowPanel extends Construct {
+  public readonly type = 'row' as const;
 
-export class RowPanel extends Construct implements IRowPanel {
-  public readonly type = 'row';
-  public readonly collapsed: boolean;
-  public readonly datasource?: DataSourceRef;
-  public readonly gridPos?: GridPos;
-  public readonly id = 0;
-  public readonly panels: Array<IPanel>;
-  public readonly repeat?: string;
   public readonly title?: string;
+  public readonly collapsed: boolean;
+  public readonly panels: AnyPanel[];
+  public readonly datasource?: DataSourceRef;
+  public readonly repeat?: string;
+  public readonly gridPos: GridPosition;
 
-  constructor(scope: Construct, id: string, props: PanelProps) {
+  #id: number | undefined;
+
+  constructor(scope: Construct, id: string, props: RowPanelProps = {}) {
     super(scope, id);
 
-    this.collapsed = props.collapsed || false;
-    this.repeat = props.repeat;
     this.title = props.title;
-    this.panels = props.panels || [];
+    this.collapsed = props.collapsed ?? false;
+    this.panels = props.panels ?? [];
+    this.datasource = props.datasource instanceof DataSource ? props.datasource.asRef() : props.datasource;
+    this.repeat = props.repeat;
+    this.#id = props.id;
+    // A row always spans the full grid and is always one row tall; `y` is left
+    // to the dashboard's layout unless the caller pinned it.
+    this.gridPos = new GridPosition(this, 'grid-position', {
+      x: 0,
+      ...(props.y === undefined ? {} : { y: props.y }),
+      w: 24,
+      h: 1,
+    });
+  }
+
+  public get id(): number | undefined {
+    return this.#id;
+  }
+
+  public assignId(id: number): void {
+    this.#id ??= id;
+  }
+
+  /** Adds a panel to this row. */
+  public addPanel(panel: AnyPanel): void {
+    this.panels.push(panel);
+  }
+
+  public toJSON(): IRowPanel {
+    return {
+      type: this.type,
+      ...(this.title === undefined ? {} : { title: this.title }),
+      collapsed: this.collapsed,
+      gridPos: this.gridPos.toJSON(),
+      id: this.#id ?? 0,
+      ...(this.datasource === undefined ? {} : { datasource: this.datasource }),
+      ...(this.repeat === undefined ? {} : { repeat: this.repeat }),
+      // An expanded row leaves its panels in the dashboard's list; emitting
+      // them here as well would render each one twice.
+      panels: this.collapsed ? this.panels.map((panel) => panel.toJSON()) : [],
+    } as IRowPanel;
   }
 }

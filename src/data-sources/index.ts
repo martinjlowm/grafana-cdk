@@ -1,3 +1,4 @@
-export * from './cloudwatch/index.js';
-export * from './expression/index.js';
-export * from './grafana.js';
+export * from '#@/data-sources/athena/index.js';
+export * from '#@/data-sources/cloudwatch/index.js';
+export * from '#@/data-sources/expression/index.js';
+export * from '#@/data-sources/grafana.js';

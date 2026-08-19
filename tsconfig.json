@@ -5,7 +5,7 @@
     "module": "node16",
     "rootDir": "./src",
     "moduleResolution": "node16",
-    "types": ["jest", "node"],
+    "types": ["node"],
     "lib": ["es2022"],
     "outDir": "./dist",
     "declaration": true,

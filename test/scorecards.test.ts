@@ -1,22 +1,35 @@
-import { App, CloudWatchDataSource, Dashboard, ExpressionDataSource, Panel } from '#@/index.js';
+import { expect, it } from 'bun:test';
 
+import {
+  App,
+  BigValueColorMode,
+  BigValueGraphMode,
+  BigValueJustifyMode,
+  BigValueTextMode,
+  CloudWatchDataSource,
+  Dashboard,
+  ExpressionDataSource,
+  StatPanel,
+  VizOrientation,
+  thresholds,
+} from '#@/index.js';
+
+/**
+ * The original end-to-end case: two CloudWatch metric queries combined by a
+ * server-side expression and reduced to a single stat.
+ */
 it('renders scorecards', () => {
   const app = new App();
   const dashboard = new Dashboard(app, 'scorecards', {
-    time: {
-      from: 'now-1M/M',
-      to: 'now-1M/M',
-    },
+    time: { from: 'now-1M/M', to: 'now-1M/M' },
     title: 'Scorecards',
     uid: 'ddtckkwkmuccgf',
   });
 
   const cloudwatch = new CloudWatchDataSource(app, 'ddocearsutibke');
-  const gatewayLatencyTarget = cloudwatch.createTarget('gateway-latency', {
-    dimensions: {
-      ApiName: 'prod-ms-graphql-gateway',
-    },
-    expression: '',
+
+  const gatewayLatency = cloudwatch.createTarget('gateway-latency', {
+    dimensions: { ApiName: 'prod-ms-graphql-gateway' },
     metricName: 'Latency',
     namespace: 'AWS/ApiGateway',
     period: 86400,
@@ -25,11 +38,8 @@ it('renders scorecards', () => {
     statistic: 'p99',
   });
 
-  const regionalGatewayLatencyTarget = cloudwatch.createTarget('regional-gateway-latency', {
-    dimensions: {
-      ApiName: 'prod-ms-graphql-gateway-regional',
-    },
-    expression: '',
+  const regionalGatewayLatency = cloudwatch.createTarget('regional-gateway-latency', {
+    dimensions: { ApiName: 'prod-ms-graphql-gateway-regional' },
     metricName: 'Latency',
     namespace: 'AWS/ApiGateway',
     period: 86400,
@@ -39,40 +49,35 @@ it('renders scorecards', () => {
   });
 
   const expression = new ExpressionDataSource(app);
-  const expressionTarget = expression.createTarget('add', {
-    expression: `${gatewayLatencyTarget.asRef()} + ${regionalGatewayLatencyTarget.asRef()}`,
+  const combined = expression.createTarget('add', {
+    expression: `${gatewayLatency.asRef()} + ${regionalGatewayLatency.asRef()}`,
     refId: 'C',
   });
 
-  // options
-  // targets -> datasource filters?
   dashboard.addPanel(
-    new Panel(app, 'p99-api-latency', {
+    new StatPanel(dashboard, 'p99-api-latency', {
       title: 'API Latency P99',
-      type: 'stat',
       datasource: cloudwatch,
+      gridPos: { h: 4, w: 4 },
       fieldConfig: {
         unit: 'ms',
+        decimals: 1,
+        thresholds: thresholds({ steps: [{ color: 'red', value: 5000 }] }),
       },
-      gridPos: { h: 4, w: 4 },
       options: {
-        colorMode: 'value',
-        graphMode: 'area',
-        justifyMode: 'auto',
-        orientation: 'auto',
-        reduceOptions: {
-          calcs: [],
-          fields: '/^Value \\(mean\\)$/',
-          values: false,
-        },
+        colorMode: BigValueColorMode.Value,
+        graphMode: BigValueGraphMode.Area,
+        justifyMode: BigValueJustifyMode.Auto,
+        orientation: VizOrientation.Auto,
+        reduceOptions: { calcs: [], fields: '/^Value \\(mean\\)$/', values: false },
         showPercentChange: false,
-        textMode: 'auto',
+        textMode: BigValueTextMode.Auto,
         wideLayout: true,
       },
       pluginVersion: '10.4.1',
-      targets: [gatewayLatencyTarget, regionalGatewayLatencyTarget, expressionTarget],
+      targets: [gatewayLatency, regionalGatewayLatency, combined],
     }),
   );
 
-  expect(dashboard.toJSON()).toMatchSnapshot();
+  expect(dashboard.toJSONString()).toMatchSnapshot();
 });

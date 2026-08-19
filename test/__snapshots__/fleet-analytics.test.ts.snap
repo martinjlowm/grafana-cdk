@@ -1,0 +1,583 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`renders a fleet analytics dashboard 1`] = `
+"{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Device fleet composition, connectivity and freshness.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "type": "barchart",
+      "title": "Devices by status",
+      "description": "Status split per device type.",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 5
+      },
+      "id": 1,
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "fleet-analytics-athena"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "fleet-analytics-athena"
+          },
+          "hide": false,
+          "format": 1,
+          "rawSQL": "SELECT device_type AS type,\\n  count(*) FILTER (WHERE online) AS \\"Online\\",\\n  count(*) FILTER (WHERE NOT online) AS \\"Offline\\"\\nFROM analytics.device_current WHERE device_type IN ($device_type)\\nGROUP BY 1 ORDER BY 1",
+          "connectionArgs": {
+            "region": "__default",
+            "catalog": "__default",
+            "database": "__default",
+            "resultReuseEnabled": true,
+            "resultReuseMaxAgeInMinutes": 30
+          }
+        }
+      ],
+      "options": {
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "normal",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "xField": "type"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "fillOpacity": 100,
+            "lineWidth": 1
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Online"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Offline"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "Composition",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 1
+      },
+      "id": 2,
+      "panels": []
+    },
+    {
+      "type": "piechart",
+      "title": "Firmware versions",
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 8,
+        "h": 8
+      },
+      "id": 3,
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "fleet-analytics-athena"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "fleet-analytics-athena"
+          },
+          "hide": false,
+          "format": 1,
+          "rawSQL": "SELECT firmware_version, count(*) AS devices FROM analytics.device_current GROUP BY 1 ORDER BY 2 DESC",
+          "connectionArgs": {
+            "region": "__default",
+            "catalog": "__default",
+            "database": "__default"
+          }
+        }
+      ],
+      "options": {
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "desc"
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        }
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "Devices by region",
+      "gridPos": {
+        "x": 8,
+        "y": 6,
+        "w": 8,
+        "h": 8
+      },
+      "id": 4,
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "fleet-analytics-athena"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "fleet-analytics-athena"
+          },
+          "hide": false,
+          "format": 1,
+          "rawSQL": "SELECT region, count(*) AS devices FROM analytics.device_current GROUP BY 1 ORDER BY 2 DESC LIMIT 20",
+          "connectionArgs": {
+            "region": "__default",
+            "catalog": "__default",
+            "database": "__default"
+          }
+        }
+      ],
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "color": {
+            "mode": "continuous-GrYlRd"
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "table",
+      "title": "Inventory",
+      "gridPos": {
+        "x": 16,
+        "y": 6,
+        "w": 8,
+        "h": 8
+      },
+      "id": 5,
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "fleet-analytics-athena"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "fleet-analytics-athena"
+          },
+          "hide": false,
+          "format": 1,
+          "rawSQL": "SELECT uuid, device_type, firmware_version, region, online FROM analytics.device_current LIMIT 200",
+          "connectionArgs": {
+            "region": "__default",
+            "catalog": "__default",
+            "database": "__default"
+          }
+        }
+      ],
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "reducer": []
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "online"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "region": true
+            },
+            "renameByName": {
+              "uuid": "Device",
+              "device_type": "Type",
+              "firmware_version": "Firmware"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Connectivity",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 24,
+        "h": 1
+      },
+      "id": 6,
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "Online devices",
+      "gridPos": {
+        "x": 0,
+        "y": 15,
+        "w": 16,
+        "h": 8
+      },
+      "id": 7,
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "fleet-analytics-athena"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "fleet-analytics-athena"
+          },
+          "hide": false,
+          "format": 0,
+          "rawSQL": "SELECT day AS time, online_devices FROM analytics.device_daily ORDER BY 1",
+          "connectionArgs": {
+            "region": "__default",
+            "catalog": "__default",
+            "database": "__default"
+          }
+        }
+      ],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never"
+          },
+          "min": 0
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Pipeline freshness",
+      "description": "Days behind for each source table.",
+      "gridPos": {
+        "x": 16,
+        "y": 15,
+        "w": 8,
+        "h": 8
+      },
+      "id": 8,
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "fleet-analytics-athena"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "fleet-analytics-athena"
+          },
+          "hide": false,
+          "format": 1,
+          "rawSQL": "SELECT 'device_current' AS tbl, 0 AS days_behind UNION ALL SELECT 'device_daily', 1",
+          "connectionArgs": {
+            "region": "__default",
+            "catalog": "__default",
+            "database": "__default"
+          }
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "d",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {
+            "mappings": [
+              {
+                "fieldName": "tbl",
+                "handlerKey": "field.name"
+              },
+              {
+                "fieldName": "days_behind",
+                "handlerKey": "field.value"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "geomap",
+      "title": "Device locations",
+      "gridPos": {
+        "x": 0,
+        "y": 23,
+        "w": 24,
+        "h": 14
+      },
+      "id": 9,
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "fleet-analytics-athena"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "fleet-analytics-athena"
+          },
+          "hide": false,
+          "format": 1,
+          "rawSQL": "SELECT location_lat AS latitude, location_lng AS longitude, uuid, device_type FROM analytics.device_current WHERE location_lat IS NOT NULL",
+          "connectionArgs": {
+            "region": "__default",
+            "catalog": "__default",
+            "database": "__default"
+          }
+        }
+      ],
+      "options": {
+        "view": {
+          "id": "zero",
+          "lat": 0,
+          "lon": 0,
+          "zoom": 1
+        },
+        "controls": {
+          "showZoom": true,
+          "mouseWheelZoom": true,
+          "showAttribution": true
+        },
+        "basemap": {
+          "type": "default",
+          "name": "Basemap"
+        },
+        "tooltip": {
+          "mode": "details"
+        },
+        "layers": [
+          {
+            "type": "markers",
+            "name": "Devices",
+            "location": {
+              "mode": "auto"
+            },
+            "config": {
+              "showLegend": false,
+              "style": {
+                "size": {
+                  "fixed": 5
+                },
+                "color": {
+                  "fixed": "blue"
+                },
+                "opacity": 0.6
+              }
+            },
+            "tooltip": true
+          }
+        ]
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    }
+  ],
+  "refresh": "15m",
+  "schemaVersion": 39,
+  "tags": [
+    "fleet",
+    "analytics"
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "device_type",
+        "type": "query",
+        "label": "Device type",
+        "datasource": {
+          "type": "grafana-athena-datasource",
+          "uid": "fleet-analytics-athena"
+        },
+        "query": "SELECT DISTINCT device_type FROM analytics.device_current ORDER BY 1",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true,
+        "options": []
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "Fleet analytics",
+  "uid": "fleet-analytics-1",
+  "version": 0,
+  "weekStart": ""
+}"
+`;

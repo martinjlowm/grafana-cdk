@@ -1,8 +1,15 @@
-import { Construct } from 'constructs';
 import type { LibraryPanelRef } from '@grafana/schema';
+import { Construct } from 'constructs';
 
-type LibraryPanelProps = LibraryPanelRef;
+export type LibraryPanelProps = LibraryPanelRef;
 
+/**
+ * A reference to a library panel — a panel saved once in Grafana and reused
+ * across dashboards.
+ *
+ * Only the reference lives in the dashboard JSON; the configuration lives in
+ * the library, so this package can describe the link but not the panel.
+ */
 export class LibraryPanel extends Construct implements LibraryPanelRef {
   public readonly name: LibraryPanelRef['name'];
   public readonly uid: LibraryPanelRef['uid'];
@@ -14,10 +21,11 @@ export class LibraryPanel extends Construct implements LibraryPanelRef {
     this.uid = props.uid;
   }
 
-  asRef() {
-    return {
-      uid: this.uid,
-      name: this.name,
-    };
+  public asRef(): LibraryPanelRef {
+    return { uid: this.uid, name: this.name };
+  }
+
+  public toJSON(): LibraryPanelRef {
+    return this.asRef();
   }
 }

@@ -1,1 +1,1 @@
-nix develop --impure
+devenv shell

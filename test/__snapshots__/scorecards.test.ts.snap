@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
 exports[`renders scorecards 1`] = `
 "{
@@ -25,65 +25,27 @@ exports[`renders scorecards 1`] = `
   "links": [],
   "panels": [
     {
+      "type": "stat",
+      "title": "API Latency P99",
       "gridPos": {
         "x": 0,
         "y": 0,
         "w": 4,
         "h": 4
       },
-      "title": "API Latency P99",
-      "type": "stat",
+      "id": 1,
       "datasource": {
         "type": "cloudwatch",
         "uid": "ddocearsutibke"
       },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 1,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 5000
-              }
-            ]
-          },
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [],
-          "fields": "/^Value \\\\(mean\\\\)$/",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
       "targets": [
         {
-          "hide": false,
+          "refId": "A",
           "datasource": {
             "type": "cloudwatch",
             "uid": "ddocearsutibke"
           },
-          "refId": "A",
+          "hide": false,
           "accountId": "all",
           "dimensions": {
             "ApiName": "prod-ms-graphql-gateway"
@@ -104,12 +66,12 @@ exports[`renders scorecards 1`] = `
           "statistic": "p99"
         },
         {
-          "hide": false,
+          "refId": "B",
           "datasource": {
             "type": "cloudwatch",
             "uid": "ddocearsutibke"
           },
-          "refId": "B",
+          "hide": false,
           "accountId": "all",
           "dimensions": {
             "ApiName": "prod-ms-graphql-gateway-regional"
@@ -130,24 +92,62 @@ exports[`renders scorecards 1`] = `
           "statistic": "p99"
         },
         {
-          "hide": false,
+          "refId": "C",
           "datasource": {
             "name": "Expression",
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "refId": "C",
-          "expression": "$A + $B",
-          "type": "math"
+          "hide": false,
+          "type": "math",
+          "expression": "$A + $B"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "/^Value \\\\(mean\\\\)$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 5000
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "pluginVersion": "10.4.1"
     }
   ],
   "schemaVersion": 39,
   "tags": [],
+  "templating": {
+    "list": []
+  },
   "time": {
-    "from": "now-30m",
-    "to": "now"
+    "from": "now-1M/M",
+    "to": "now-1M/M"
   },
   "timepicker": {},
   "timezone": "browser",

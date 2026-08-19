@@ -1,35 +1,36 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { Construct, type IConstruct, type Node } from 'constructs';
+import { Construct, type IConstruct } from 'constructs';
+
 import { Dashboard } from '#@/dashboard.js';
 
 export interface AppProps {
+  /** Directory the dashboard JSON is written to. Created if missing. */
   readonly outdir?: string;
+  /**
+   * How the filename is derived from a dashboard. Defaults to the dashboard's
+   * uid when it has one and its title otherwise: titles are not unique and
+   * routinely contain `/`, which silently writes into a subdirectory that does
+   * not exist.
+   */
+  readonly fileName?: (dashboard: Dashboard) => string;
 }
 
-class SynthRequestCache {
-  public nodeChildrenCache: Map<Node, IConstruct[]> = new Map<Node, IConstruct[]>();
-
-  public findAll(node: Node): IConstruct[] {
-    const child = this.nodeChildrenCache.get(node);
-
-    if (child) {
-      return child;
-    }
-
-    const children = node.findAll();
-    this.nodeChildrenCache.set(node, children);
-    return children;
-  }
-}
-
+/**
+ * The root of the construct tree, and the thing that writes the JSON.
+ *
+ * Not a `Dashboard` container in the CDK "stack" sense — Grafana has no unit
+ * above a dashboard — so an app is simply the scope that owns them and the
+ * place validation is collected.
+ */
 export class App extends Construct {
-  public static of(c: IConstruct): App {
-    const scope = c.node.scope;
+  /** Walks up to the app from anywhere in the tree. */
+  public static of(construct: IConstruct): App {
+    const scope = construct.node.scope;
 
     if (!scope) {
-      // the app is the only construct without a scope.
-      return c as App;
+      // The app is the only construct without a scope.
+      return construct as App;
     }
 
     return App.of(scope);
@@ -37,41 +38,62 @@ export class App extends Construct {
 
   public readonly outdir: string;
 
+  readonly #fileName: (dashboard: Dashboard) => string;
+
   public get dashboards(): Dashboard[] {
-    return this.node.children.filter((node: IConstruct): node is Dashboard => node instanceof Dashboard);
+    return this.node.findAll().filter((node: IConstruct): node is Dashboard => node instanceof Dashboard);
   }
 
   constructor(props: AppProps = {}) {
-    // @ts-ignore
-    super(undefined, '');
+    // The root has no scope and no id; `constructs` types both as required.
+    super(undefined as unknown as Construct, '');
+
     this.outdir = props.outdir ?? 'dist';
+    this.#fileName = props.fileName ?? ((dashboard) => dashboard.uid ?? dashboard.title);
   }
 
+  /**
+   * Validates every construct, then writes one JSON file per dashboard.
+   *
+   * Validation runs across the whole tree before anything is written, so a
+   * dashboard is never left half-emitted next to a failure.
+   */
   public synth(): void {
+    const errors = this.validate();
+
+    if (errors.length > 0) {
+      throw new Error(`Validation failed with the following errors:\n  ${errors.join('\n  ')}`);
+    }
+
     fs.mkdirSync(this.outdir, { recursive: true });
 
-    const cache = new SynthRequestCache();
-
-    // Since we plan on removing the distributed synth mechanism, we no longer call `Node.synthesize`, but rather simply implement
-    // the necessary operations. We do however want to preserve the distributed validation.
-    validate(this, cache);
+    const written = new Map<string, string>();
 
     for (const dashboard of this.dashboards) {
-      fs.writeFileSync(path.join(this.outdir, `${dashboard.title}.json`), dashboard.toJSON());
+      const name = this.#fileName(dashboard);
+      const previous = written.get(name);
+
+      if (previous) {
+        throw new Error(
+          `Dashboards [${previous}] and [${dashboard.node.path}] both synthesize to ${name}.json; one would overwrite the other.`,
+        );
+      }
+      written.set(name, dashboard.node.path);
+
+      fs.writeFileSync(path.join(this.outdir, `${name}.json`), `${dashboard.toJSONString()}\n`);
     }
   }
-}
 
-function validate(app: App, cache: SynthRequestCache) {
-  const errors = [];
-  for (const child of cache.findAll(app.node)) {
-    const childErrors = child.node.validate();
-    for (const error of childErrors) {
-      errors.push(`[${child.node.path}] ${error}`);
+  /** Every validation error in the tree, prefixed with the construct's path. */
+  public validate(): string[] {
+    const errors: string[] = [];
+
+    for (const child of this.node.findAll()) {
+      for (const error of child.node.validate()) {
+        errors.push(`[${child.node.path}] ${error}`);
+      }
     }
-  }
 
-  if (errors.length > 0) {
-    throw new Error(`Validation failed with the following errors:\n  ${errors.join('\n  ')}`);
+    return errors;
   }
 }

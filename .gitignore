@@ -1,17 +1,25 @@
-# Yarn
-.pnp.*
+# Nix / devenv / direnv
+.devenv/
+.direnv/
+.devenv.flake.nix
+devenv.local.nix
+# devenv git-hooks writes this as a symlink into the Nix store
+.pre-commit-config.yaml
+result
+result-*
+
+# Node
+node_modules/
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.pnp.*
 
-.log
-.direnv
-.devenv*
-.pre-commit-config.yaml
+# Build output
+dist/
 
-dist
-*.js
-result
+# OS
+.DS_Store

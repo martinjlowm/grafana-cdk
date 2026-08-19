@@ -4,7 +4,7 @@
   "compilerOptions": {
     "target": "es2022",
     "rootDir": "..",
-    "types": ["node", "jest"],
+    "types": ["node", "bun"],
     "lib": ["es2022"]
   }
 }

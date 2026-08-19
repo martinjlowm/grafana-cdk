@@ -1,24 +1,43 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
-  "files": {
-    "ignore": [".yarn/*", ".pnp.*"]
-  },
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true,
     "defaultBranch": "origin/master"
   },
+  "files": {
+    "ignore": [".yarn", ".devenv", ".direnv", "dist", "node_modules", "test/fixtures"]
+  },
+  "organizeImports": {
+    "enabled": true
+  },
   "formatter": {
+    "enabled": true,
     "indentStyle": "space",
+    "indentWidth": 2,
     "lineWidth": 120
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "useLiteralKeys": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useNamingConvention": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn"
+      }
+    }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single"
+      "quoteStyle": "single",
+      "trailingCommas": "all"
     }
   }
 }
