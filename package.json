@@ -26,26 +26,16 @@
     }
   },
   "imports": {
-    "#@/*.js": {
-      "development": "./src/*.ts",
-      "default": "./dist/*.js"
-    },
-    "#@/*": {
-      "development": "./src/*",
-      "default": "./dist/*"
-    },
-    "#$/*.js": {
-      "default": "./test/*.ts"
-    },
-    "#$/*": {
-      "default": "./test/*"
-    }
+    "#@/*.js": "./src/*.ts",
+    "#@/*": "./src/*",
+    "#$/*.js": "./test/*.ts",
+    "#$/*": "./test/*"
   },
   "scripts": {
     "build": "tsc",
     "docs": "node docs/build.cjs",
-    "test": "bun test --conditions=development",
-    "test:update": "bun test --conditions=development --update-snapshots",
+    "test": "bun test",
+    "test:update": "bun test --update-snapshots",
     "typecheck": "tsc --noEmit && tsc -p test --noEmit && tsc -p docs/snippets --noEmit",
     "lint": "biome check .",
     "format": "biome check --write ."

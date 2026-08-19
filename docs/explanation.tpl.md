@@ -166,12 +166,23 @@ are stable across refactors of the classes behind them.
 
 ## Package layout
 
-`#@/*` resolves to `./src/*` under the `development` condition and `./dist/*`
-otherwise, so the checkout runs against sources and the published package
-against compiled output without a second `package.json` that can drift. The
-`development` condition is stripped from `exports` when the publish artifact is
-built, since `./src` is not shipped.
+`#@/*` resolves to `./src/*` and `#$/*` to `./test/*`, unconditionally. The
+checkout therefore runs against sources under any tool, with no flags: plain
+`bun test` works, and so does anything else that honours the `imports` map.
 
-Bun needs `--conditions=development` to honour it — there is no `bunfig.toml`
-equivalent — which is why `yarn test` carries the flag and the `just` recipes go
-through yarn rather than calling `bun test` directly.
+The published package needs those same specifiers to point at `./dist`, and it
+gets there because `nix/dist.nix` rewrites `imports` (and `exports`) when it
+builds the publish artifact. That is one substitution in one place, which is
+strictly less machinery than the alternative these paths used to carry: an
+`imports` map conditioned on `development`, plus every runner having to opt into
+that condition. Bun has no `bunfig.toml` equivalent of `--conditions`, so the
+flag had to be threaded through `yarn test` and every `just` recipe — a
+convention that only had to be forgotten once, by anyone typing `bun test` out
+of habit, to produce a wall of "Cannot find module '#@/index.js'".
+
+`exports` does still carry a `development` condition, for one narrow reason:
+`docs/snippets` imports the package by name (`@martinjlowm/grafana-cdk`) so the
+documented code reads the way a consumer's would, and `tsc` needs somewhere to
+resolve that to in a checkout with no `./dist`. It is a type-checking concern
+only — nothing executes those snippets — and `tsconfig.json`'s
+`customConditions` is what turns it on.

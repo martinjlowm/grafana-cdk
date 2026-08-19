@@ -1,15 +1,13 @@
 _default:
     @just --list
 
-# Unit + snapshot tests (bun). Via yarn, not `bun test` directly: the runner
-# needs --conditions=development to resolve `#@/*` to src rather than dist, and
-# bunfig.toml has no equivalent knob.
+# Unit + snapshot tests
 test:
-    yarn test
+    bun test
 
 # Update the committed snapshots
 test-update:
-    yarn test:update
+    bun test --update-snapshots
 
 # Type-check the TypeScript (src and test)
 check-ts:
