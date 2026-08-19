@@ -53,17 +53,28 @@ dashboard.addPanel(
 app.synth();
 ```
 
+Panels that omit `x` and `y` are flowed in the order they are added. When a
+dashboard needs a real layout, describe the split and let a `Grid` allocate the
+space:
+
+```typescript
+const grid = new Grid();
+
+const [total, online, offline] = grid.row(4, 3);              // three equal columns
+const { trend, breakdown } = grid.row(10, { trend: 'two-thirds', breakdown: 'third' });
+const [byRegion, byVersion] = breakdown.rows(['half', 'half']);
+```
+
+Each area is already a valid `gridPos`, so it goes straight onto a panel.
+
 ## Documentation
 
-The documentation follows [Diátaxis](https://diataxis.fr/): four kinds of page,
-each answering a different kind of question.
-
-### Tutorial — *learning*
+### Tutorial
 
 - [Build your first dashboard](docs/tutorial.md) — start here. One end-to-end
   pass from an empty file to a JSON model you can import.
 
-### How-to guides — *goals*
+### How-to guides
 
 - [Lay out panels on the grid](docs/how-to/lay-out-panels.md)
 - [Set time ranges](docs/how-to/set-time-ranges.md)
@@ -72,11 +83,11 @@ each answering a different kind of question.
 - [Transform panel data](docs/how-to/transform-data.md)
 - [Add a data source this package does not ship](docs/how-to/add-a-data-source.md)
 
-### Reference — *information*
+### Reference
 
 - [API reference](docs/reference.md) — every construct, prop and helper.
 
-### Explanation — *understanding*
+### Background
 
 - [Design notes](docs/explanation.md) — why the constructs are shaped the way
   they are, and what each piece of validation is protecting you from.

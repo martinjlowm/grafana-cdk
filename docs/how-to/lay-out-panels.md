@@ -2,6 +2,9 @@
 
 Grafana lays panels out on a fixed 24-column grid; a row is 30 pixels tall.
 
+There are three ways to place a panel, in increasing order of control: let the
+dashboard flow it, allocate it from a `Grid`, or pin `x` and `y` yourself.
+
 ## Let the dashboard place panels
 
 Omit `x` and `y`. Panels flow left to right in the order they are added, and
@@ -12,6 +15,129 @@ below the *tallest* panel on the previous one.
 dashboard.addPanel(new StatPanel(dashboard, 'requests', { gridPos: { w: 8, h: 4 } }));
 dashboard.addPanel(new StatPanel(dashboard, 'errors', { gridPos: { w: 8, h: 4 } }));
 dashboard.addPanel(new StatPanel(dashboard, 'latency', { gridPos: { w: 8, h: 4 } }));
+```
+
+## Allocate space with a `Grid`
+
+Flow handles a dashboard that reads top to bottom in equal blocks. It cannot say
+"this chart takes two thirds of the row and these stats share the rest" — for
+that, describe the split and let a `Grid` hand back the areas.
+
+```typescript
+const grid = new Grid();
+
+const [a, b, c] = grid.row(4, 3);                                // three equal columns
+const { chart, side } = grid.row(10, { chart: 'two-thirds', side: 'third' });
+const [inventory, notes] = grid.row(8, [16, 'auto']);            // 16 columns, then the rest
+```
+
+Each call takes the next band of rows and returns the areas it was split into,
+so the source reads top to bottom the way the dashboard does. A `GridArea`
+already satisfies `gridPos`:
+
+```typescript
+dashboard.addPanel(new TimeSeriesPanel(dashboard, 'trend', { title: 'Trend', gridPos: chart }));
+```
+
+### Spans
+
+| Span | Means |
+| --- | --- |
+| `8` | Exactly 8 columns. |
+| `'half'`, `'third'`, `'two-thirds'`, `'quarter'`, `'three-quarters'`, `'full'` | A share of what the row offers. |
+| `'2/3'`, `'1/5'` | The same, as an arbitrary fraction. |
+| `'auto'` | An equal share of whatever the other spans left over. |
+
+Passing a count instead of an array — `grid.row(4, 3)` — is shorthand for three
+`'auto'` cells.
+
+Fractions rarely divide 24 evenly, so the widths are apportioned by largest
+remainder: `['1/5', '1/5', '1/5', '1/5', '1/5']` becomes `5, 5, 5, 5, 4` rather
+than five 5s (an overflow) or five 4s (a four-column hole). Spans that do not
+fill the row simply leave the rest empty; spans that overflow it throw.
+
+### Subdividing
+
+Areas divide further, so a column can be stacked without recomputing anything:
+
+```typescript
+const [byRegion, byVersion] = side.rows(['half', 'half']);
+const [left, right] = byRegion.columns(2);
+```
+
+`rows()` takes the same spans as `columns()`, measured against the area's height.
+
+### Section headers and gaps
+
+`grid.header()` reserves the single row a `RowPanel` occupies and returns its
+`y`; `grid.skip(rows)` leaves a gap; `grid.seek(y)` rewinds the cursor to lay a
+region out again. `grid.y` is where the next allocation will start.
+
+```typescript
+dashboard.addPanel(new RowPanel(dashboard, 'detail-row', { title: 'Detail', y: grid.header() }));
+```
+
+### A grid over part of the dashboard
+
+`new Grid({ x, columns, y })` plans a region rather than the whole width — useful
+for filling space some other layout already allocated.
+
+```typescript
+const sidebar = new Grid({ x: 16, columns: 8, y: 5 });
+```
+
+Grid areas carry concrete coordinates, so panels placed from one are pinned.
+Mixing a grid with flowed panels on the same dashboard is allowed, and the
+overlap check is what keeps the two honest.
+
+### A whole dashboard from one grid
+
+```typescript
+import {
+  App,
+  BarGaugePanel,
+  Dashboard,
+  Grid,
+  RowPanel,
+  StatPanel,
+  TablePanel,
+  TimeSeriesPanel,
+} from '@martinjlowm/grafana-cdk';
+
+const app = new App();
+const dashboard = new Dashboard(app, 'fleet', { title: 'Fleet', uid: 'fleet-000001' });
+
+const grid = new Grid();
+
+// Four equal stats across the top: a count is the shorthand for `['auto', …]`.
+const [total, online, offline, stale] = grid.row(4, 4);
+
+dashboard.addPanel(new StatPanel(dashboard, 'total', { title: 'Total', gridPos: total }));
+dashboard.addPanel(new StatPanel(dashboard, 'online', { title: 'Online', gridPos: online }));
+dashboard.addPanel(new StatPanel(dashboard, 'offline', { title: 'Offline', gridPos: offline }));
+dashboard.addPanel(new StatPanel(dashboard, 'stale', { title: 'Stale', gridPos: stale }));
+
+// A section header takes exactly one row.
+dashboard.addPanel(new RowPanel(dashboard, 'detail-row', { title: 'Detail', y: grid.header() }));
+
+// Named areas, so the split is legible at the call site rather than by index.
+const { trend, breakdown } = grid.row(10, { trend: 'two-thirds', breakdown: 'third' });
+
+dashboard.addPanel(new TimeSeriesPanel(dashboard, 'trend', { title: 'Trend', gridPos: trend }));
+
+// Areas subdivide, so a column can be stacked without recomputing anything.
+const [byRegion, byVersion] = breakdown.rows(['half', 'half']);
+
+dashboard.addPanel(new BarGaugePanel(dashboard, 'by-region', { title: 'By region', gridPos: byRegion }));
+dashboard.addPanel(new BarGaugePanel(dashboard, 'by-version', { title: 'By version', gridPos: byVersion }));
+
+// `auto` takes whatever the fixed spans left over — here 24 - 16 = 8 columns.
+const [inventory, notes] = grid.row(8, [16, 'auto']);
+
+dashboard.addPanel(new TablePanel(dashboard, 'inventory', { title: 'Inventory', gridPos: inventory }));
+dashboard.addPanel(new StatPanel(dashboard, 'notes', { title: 'Notes', gridPos: notes }));
+
+app.synth();
 ```
 
 ## Pin a panel
@@ -43,7 +169,7 @@ row carries its panels inline; an expanded one leaves them in the dashboard's
 own list. The construct emits whichever form matches, so you do not have to
 remember which.
 
-## All together
+## Flow, pinning and rows together
 
 ```typescript
 import { App, Dashboard, RowPanel, StatPanel, TimeSeriesPanel } from '@martinjlowm/grafana-cdk';
@@ -86,6 +212,11 @@ anything — reports:
 
 Panels that merely touch — one ending at column 12 and the next starting there —
 are not overlapping.
+
+A `Grid` rejects its own mistakes eagerly, at the call that made them, since a
+bad split is a programming error rather than a dashboard-level constraint: spans
+totalling more than the available space, a split too fine to give every cell a
+column, a malformed span, or a grid that starts past column 24.
 
 ## Panel ids
 

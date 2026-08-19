@@ -121,6 +121,45 @@ dashboard's own list, which is where Grafana expects them.
 | `GridLayout` | The left-to-right packer, plus `GridLayout.validateNoOverlap`. |
 | `isGridPosition(node)` | Narrowing helper. |
 
+### Grid allocation
+
+`GridSpan` is `number` (an exact count), a `GridFraction` (`'2/3'`), a
+`GridSpanAlias` (`'full'`, `'half'`, `'third'`, `'two-thirds'`, `'quarter'`,
+`'three-quarters'`), or `'auto'` (an equal share of what is left over).
+
+`new Grid(props?)`
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `columns` | `number` | `24` |
+| `x` | `number` | `0` |
+| `y` | `number` | `0` |
+
+| Member | Returns | Notes |
+| --- | --- | --- |
+| `row(height, count)` | `GridArea[]` | Equal columns. |
+| `row(height, spans)` | one area per span | A span tuple keeps its length, so destructuring yields `GridArea` rather than `GridArea \| undefined`. |
+| `row(height, {name: span})` | `Record<name, GridArea>` | Areas by name. |
+| `band(height)` | `GridArea` | The next `height` rows, full width. |
+| `header()` | `number` | Reserves one row and returns its `y`, for a `RowPanel`. |
+| `skip(rows)` | `this` | Leaves a gap. |
+| `seek(y)` | `this` | Rewinds the cursor. |
+| `y` | `number` | Where the next allocation starts. |
+| `columns` | `number` | The grid's width. |
+
+`GridArea` — `{x, y, w, h}`, so it is usable directly as `gridPos`.
+
+| Member | Returns | Notes |
+| --- | --- | --- |
+| `columns(count \| spans)` | areas | Splits horizontally, same three forms as `row`. |
+| `rows(count \| spans)` | areas | Splits vertically, spans measured against `h`. |
+| `with(overrides)` | `GridPositionProps` | This area plus e.g. `{static: true}`. |
+| `right`, `bottom` | `number` | Far edges. |
+| `toJSON()` | `{x, y, w, h}` | |
+
+Widths are apportioned by largest remainder, so a row of fifths comes out
+`5, 5, 5, 5, 4` rather than overflowing or leaving a hole.
+
 ## Time
 
 | Export | Notes |

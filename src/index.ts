@@ -10,6 +10,7 @@ export * from '#@/enums.js';
 export * from '#@/field-config.js';
 export * from '#@/field-overrides.js';
 export * from '#@/grid-position.js';
+export * from '#@/grid.js';
 export * from '#@/library-panel.js';
 export * from '#@/panel.js';
 export * from '#@/panels/index.js';

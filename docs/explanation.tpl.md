@@ -59,6 +59,27 @@ and pinned panels honest with each other, since they share one coordinate space.
 Panel ids work the same way, and for the same reason: unique within a dashboard,
 assigned from above the highest explicit id so the two schemes cannot collide.
 
+## Why the grid allocator is a separate thing
+
+Flow covers dashboards that read as equal blocks top to bottom. It cannot
+express proportions — "this chart takes two thirds of the row" — because the
+flow cursor only knows what it has already placed, not what is still coming.
+
+`Grid` is the other half: you state the split up front and it returns concrete
+areas. It is a plain value, not a construct, because it computes coordinates and
+has no identity in the tree; and it hands back `GridArea`s rather than mutating
+panels, so a grid can be used for part of a dashboard and ignored for the rest.
+
+Two details are load-bearing. Widths are apportioned by largest remainder rather
+than rounded per cell, because a fifth of 24 columns is 4.8 and independent
+rounding either overflows the row or leaves a one-column hole running down the
+dashboard — the sort of thing you only notice in a screenshot. And the return
+types are tuples rather than arrays, mapped from the span literal, so
+`const [chart, side] = grid.row(8, ['two-thirds', 'third'])` yields `GridArea`
+rather than `GridArea | undefined` for anyone building with
+`noUncheckedIndexedAccess`. A convenience API that makes you write `!` on every
+line is not a convenience.
+
 ## Why time boundaries need both a type and a parser
 
 `RelativeTimeString` is a template literal type, which catches `now-6H`,
