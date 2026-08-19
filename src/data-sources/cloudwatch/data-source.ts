@@ -1,7 +1,7 @@
 import type { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source.js';
-import { CloudWatchDataSourceTarget, type CloudWatchDataSourceTargetProps } from '#@/data-sources/cloudwatch/target.js';
+import { DataSource } from '#@/data-source.ts';
+import { CloudWatchDataSourceTarget, type CloudWatchDataSourceTargetProps } from '#@/data-sources/cloudwatch/target.ts';
 
 /** The Amazon CloudWatch data source plugin, bundled with Grafana. */
 export class CloudWatchDataSource extends DataSource {

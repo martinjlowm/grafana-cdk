@@ -9,8 +9,8 @@ import {
 } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source.js';
-import type { DurationString } from '#@/duration.js';
+import { DataSource } from '#@/data-source.ts';
+import type { DurationString } from '#@/duration.ts';
 
 export { VariableHide, VariableRefresh, VariableSort };
 export type { VariableModel, VariableOption, VariableType };

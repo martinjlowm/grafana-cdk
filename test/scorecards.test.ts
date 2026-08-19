@@ -12,7 +12,7 @@ import {
   StatPanel,
   VizOrientation,
   thresholds,
-} from '#@/index.js';
+} from '#@/index.ts';
 
 /**
  * The original end-to-end case: two CloudWatch metric queries combined by a

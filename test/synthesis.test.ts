@@ -3,9 +3,9 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'bun:test';
 
-import { App, Dashboard, Panel } from '#@/index.js';
+import { App, Dashboard, Panel } from '#@/index.ts';
 
-import { withTemporaryDirectory } from '#$/utils.js';
+import { withTemporaryDirectory } from '#$/utils.ts';
 
 describe('App.synth', () => {
   it(

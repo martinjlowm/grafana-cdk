@@ -1,6 +1,6 @@
 import type { Construct } from 'constructs';
 
-import { Panel, type PanelProps } from '#@/panel.js';
+import { Panel, type PanelProps } from '#@/panel.ts';
 import type {
   BarChartFieldConfig,
   BarChartOptions,
@@ -15,9 +15,9 @@ import type {
   TextOptions,
   TimeSeriesFieldConfig,
   TimeSeriesOptions,
-} from '#@/panels/options.js';
+} from '#@/panels/options.ts';
 
-export * from '#@/panels/options.js';
+export * from '#@/panels/options.ts';
 
 /**
  * Typed panel constructs, one per bundled Grafana visualisation.

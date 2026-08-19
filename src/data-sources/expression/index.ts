@@ -1,2 +1,2 @@
-export * from '#@/data-sources/expression/data-source.js';
-export * from '#@/data-sources/expression/target.js';
+export * from '#@/data-sources/expression/data-source.ts';
+export * from '#@/data-sources/expression/target.ts';

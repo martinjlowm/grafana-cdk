@@ -1,5 +1,5 @@
-import { DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.js';
-import type { ExpressionDataSource } from '#@/data-sources/expression/data-source.js';
+import { DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.ts';
+import type { ExpressionDataSource } from '#@/data-sources/expression/data-source.ts';
 
 /**
  * The server-side expression kinds Grafana's `__expr__` data source supports.

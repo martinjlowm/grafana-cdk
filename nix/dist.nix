@@ -56,7 +56,7 @@ in
     installPhase = ''
       mkdir -p $out
 
-      ${_jq} '.imports = {"#@/*.js": ["./dist/*.js"], "#@/*": ["./dist/*.js", "./dist/*"]}
+      ${_jq} '.imports = {"#@/*.ts": ["./dist/*.js"], "#@/*": ["./dist/*.js", "./dist/*"]}
               | .exports = {".": {"types": "./dist/index.d.ts", "default": "./dist/index.js"},
                             "./*": {"types": "./dist/*.d.ts", "default": "./dist/*.js"}}
               | del(.workspaces)

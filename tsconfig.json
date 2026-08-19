@@ -11,6 +11,13 @@
     "declaration": true,
     "declarationDir": "./dist",
     "customConditions": ["development"],
+    // Specifiers name the file that exists, because this project executes in
+    // place — see docs/explanation.md. `rewriteRelativeImportExtensions` is
+    // what permits `allowImportingTsExtensions` while still emitting; it
+    // rewrites nothing here, since every specifier goes through the package
+    // `imports` map and TypeScript only rewrites *relative* paths.
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 
-import { duration, durationToMilliseconds, isDuration } from '#@/duration.js';
+import { duration, durationToMilliseconds, isDuration } from '#@/duration.ts';
 import {
   DataTopic,
   MappingType,
@@ -15,7 +15,7 @@ import {
   thresholds,
   transformation,
   valueMap,
-} from '#@/index.js';
+} from '#@/index.ts';
 
 describe('thresholds', () => {
   it('adds the implicit base step the schema requires', () => {

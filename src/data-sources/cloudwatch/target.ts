@@ -1,6 +1,6 @@
-import { DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.js';
-import type { CloudWatchDataSource } from '#@/data-sources/cloudwatch/data-source.js';
-import type { DurationString } from '#@/duration.js';
+import { DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.ts';
+import type { CloudWatchDataSource } from '#@/data-sources/cloudwatch/data-source.ts';
+import type { DurationString } from '#@/duration.ts';
 
 /**
  * Shapes mirrored from grafana/grafana

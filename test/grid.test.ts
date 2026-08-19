@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 
-import { App, Dashboard, Grid, type GridArea, RowPanel, StatPanel } from '#@/index.js';
+import { App, Dashboard, Grid, type GridArea, RowPanel, StatPanel } from '#@/index.ts';
 
 function widths(areas: GridArea[]): number[] {
   return areas.map((area) => area.w);

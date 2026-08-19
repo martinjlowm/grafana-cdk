@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 
-import { App, Dashboard, Panel } from '#@/index.js';
+import { App, Dashboard, Panel } from '#@/index.ts';
 
 function dashboard(): { app: App; dashboard: Dashboard } {
   const app = new App();

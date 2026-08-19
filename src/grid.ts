@@ -1,9 +1,9 @@
-import { GRID_COLUMNS, type GridPositionProps } from '#@/grid-position.js';
+import { GRID_COLUMNS, type GridPositionProps } from '#@/grid-position.ts';
 
 /**
  * Laying a dashboard out by hand means writing `{x: 8, y: 12, w: 8, h: 6}` on
  * every panel and recomputing all of it the moment a panel is inserted or
- * resized. The flow layout in `#@/grid-position.js` avoids that for simple
+ * resized. The flow layout in `#@/grid-position.ts` avoids that for simple
  * reading-order dashboards, but it cannot express "this chart takes two thirds
  * of the row and these three stats share the rest".
  *

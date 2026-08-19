@@ -1,7 +1,7 @@
 import type { AnnotationPanelFilter, DataQuery, AnnotationQuery as IAnnotationQuery } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source.js';
+import { DataSource } from '#@/data-source.ts';
 
 export interface AnnotationQueryProps<TQuery extends DataQuery = DataQuery> {
   /** Name shown on the dashboard's annotation toggle. */

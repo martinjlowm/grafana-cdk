@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { Construct, type IConstruct } from 'constructs';
 
-import { Dashboard } from '#@/dashboard.js';
+import { Dashboard } from '#@/dashboard.ts';
 
 export interface AppProps {
   /** Directory the dashboard JSON is written to. Created if missing. */

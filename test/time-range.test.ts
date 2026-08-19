@@ -8,7 +8,7 @@ import {
   isRelativeTime,
   parseRelativeTime,
   resolveTimeBoundary,
-} from '#@/time-range.js';
+} from '#@/time-range.ts';
 
 describe('relative markup', () => {
   it.each<[string, RelativeTime]>([

@@ -7,7 +7,7 @@ import type {
 } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import type { FieldOverride } from '#@/field-overrides.js';
+import type { FieldOverride } from '#@/field-overrides.ts';
 
 export type { FieldColor, FieldConfigSource, IFieldConfig, ThresholdsConfig, ValueMapping };
 
@@ -32,7 +32,7 @@ export interface FieldConfigProps<TCustom = Record<string, unknown>> {
   displayNameFromDS?: string;
   filterable?: boolean;
   links?: unknown[];
-  /** Rewrites values for display. See `#@/value-mappings.js`. */
+  /** Rewrites values for display. See `#@/value-mappings.ts`. */
   mappings?: ValueMapping[];
   /** Ceiling for percentage thresholds and gauges; omit to auto-scale. */
   max?: number;
@@ -41,12 +41,12 @@ export interface FieldConfigProps<TCustom = Record<string, unknown>> {
   /** Shown instead of an empty cell. */
   noValue?: string;
   path?: string;
-  /** See `#@/thresholds.js`. */
+  /** See `#@/thresholds.ts`. */
   thresholds?: ThresholdsConfig;
   /** Grafana unit id (`ms`, `percentunit`, `bytes`) or a `suffix:`/`si:` form. */
   unit?: string;
   writeable?: boolean;
-  /** Per-field exceptions to the above. See `#@/field-overrides.js`. */
+  /** Per-field exceptions to the above. See `#@/field-overrides.ts`. */
   overrides?: FieldOverride[];
 }
 

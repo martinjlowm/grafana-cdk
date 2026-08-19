@@ -6,13 +6,13 @@ import type {
 } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import type { DashboardLink } from '#@/dashboard-link.js';
-import { DataSource, type DataSourceTarget } from '#@/data-source.js';
-import { type DurationString, isDuration } from '#@/duration.js';
-import { FieldConfig, type FieldConfigProps } from '#@/field-config.js';
-import { GridPosition, type GridPositionProps } from '#@/grid-position.js';
-import type { LibraryPanel } from '#@/library-panel.js';
-import { type RelativeTimeString, isRelativeTime } from '#@/time-range.js';
+import type { DashboardLink } from '#@/dashboard-link.ts';
+import { DataSource, type DataSourceTarget } from '#@/data-source.ts';
+import { type DurationString, isDuration } from '#@/duration.ts';
+import { FieldConfig, type FieldConfigProps } from '#@/field-config.ts';
+import { GridPosition, type GridPositionProps } from '#@/grid-position.ts';
+import type { LibraryPanel } from '#@/library-panel.ts';
+import { type RelativeTimeString, isRelativeTime } from '#@/time-range.ts';
 
 /**
  * A panel-level time override. Grafana accepts both a relative marker
@@ -38,7 +38,7 @@ export interface PanelProps<TOptions = Record<string, unknown>, TCustomFieldConf
   options?: TOptions;
   /** Field display options, standard and plugin-specific. */
   fieldConfig?: FieldConfigProps<TCustomFieldConfig>;
-  /** Transformations applied before rendering. See `#@/data-transformer.js`. */
+  /** Transformations applied before rendering. See `#@/data-transformer.ts`. */
   transformations?: DataTransformerConfig[];
   /** Unique within the dashboard; assigned by the dashboard when omitted. */
   id?: number;

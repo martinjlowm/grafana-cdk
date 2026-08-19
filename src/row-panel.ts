@@ -1,9 +1,9 @@
 import type { DataSourceRef, RowPanel as GrafanaRowPanel } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source.js';
-import { GridPosition } from '#@/grid-position.js';
-import type { AnyPanel } from '#@/panel.js';
+import { DataSource } from '#@/data-source.ts';
+import { GridPosition } from '#@/grid-position.ts';
+import type { AnyPanel } from '#@/panel.ts';
 
 export interface RowPanelProps {
   title?: string;

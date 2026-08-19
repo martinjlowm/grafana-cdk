@@ -1,9 +1,9 @@
 import type { DataTopic, DataTransformerConfig, MatcherConfig } from '@grafana/schema';
 
-import type { FieldMatcher } from '#@/field-overrides.js';
+import type { FieldMatcher } from '#@/field-overrides.ts';
 
 // `DataTopic` is an enum, so it is a value as well as a type; it is re-exported
-// from `#@/enums.js` alongside the rest of them rather than as a type here,
+// from `#@/enums.ts` alongside the rest of them rather than as a type here,
 // which would make `DataTopic.Series` unusable through the barrel.
 export type { DataTransformerConfig, MatcherConfig };
 

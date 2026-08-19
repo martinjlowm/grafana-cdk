@@ -178,7 +178,44 @@ strictly less machinery than the alternative these paths used to carry: an
 that condition. Bun has no `bunfig.toml` equivalent of `--conditions`, so the
 flag had to be threaded through `yarn test` and every `just` recipe — a
 convention that only had to be forgotten once, by anyone typing `bun test` out
-of habit, to produce a wall of "Cannot find module '#@/index.js'".
+of habit, to produce a wall of "Cannot find module".
+
+## Why specifiers end in `.ts`
+
+The long-standing TypeScript convention is to import `./foo.js` — the file the
+compiler is *going* to emit — because TypeScript never rewrites module
+specifiers. That convention is correct for a project whose code only runs after
+a build. This one's does not: development, tests and synthesis all execute the
+sources in place, and the build exists solely to produce the npm artifact. So
+the specifier names the file that exists.
+
+Two compiler options make that work while still emitting:
+`allowImportingTsExtensions` permits it, and `rewriteRelativeImportExtensions`
+is what permits *that* alongside an emit. The second one does no rewriting here
+at all — TypeScript only rewrites **relative** paths, and every specifier in
+this package goes through the `imports` map instead. The emitted `dist/*.js` and
+`dist/*.d.ts` therefore carry `#@/panel.ts` verbatim, and the published map
+keys on `#@/*.ts` to send them to `./dist/*.js`. A consumer resolves it without
+knowing any of this — verified by building the artifact and both running and
+typechecking against it.
+
+That rewrite lives in a jq expression in `nix/dist.nix`, so renaming a specifier
+in `package.json` without updating it there would ship an artifact that resolves
+nothing, and neither Bun nor TypeScript would notice. `test/resolution.test.ts`
+checks the two maps against each other for that reason.
+
+Worth knowing if you add a **relative** import: `./foo.js` would break under
+Node's type stripper, because Node resolves relative specifiers literally and
+will not map `.js` to `.ts`. Subpath imports are exempt precisely because the
+`imports` map does that mapping. Nothing enforces the convention, so prefer
+`#@/*` for new imports and this stays a non-issue.
+
+Note also that the source is **not** erasable: it declares enums, which Node's
+type stripper rejects outright (`ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX`). Bun is a
+full transpiler rather than a stripper, so it handles them, which is why "run in
+place" here means Bun specifically. Making the source strip-able would mean
+replacing every enum with a const-object and union-type pair, loosening those
+public types from nominal to structural — deliberately not done.
 
 `exports` does still carry a `development` condition, for one narrow reason:
 `docs/snippets` imports the package by name (`@martinjlowm/grafana-cdk`) so the

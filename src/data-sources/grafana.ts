@@ -1,6 +1,6 @@
 import type { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source.js';
+import { DataSource } from '#@/data-source.ts';
 
 /**
  * Grafana's built-in data source — the one every dashboard's default

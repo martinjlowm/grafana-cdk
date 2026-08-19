@@ -1,7 +1,7 @@
 import type { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source.js';
-import { AthenaTarget, type AthenaTargetProps } from '#@/data-sources/athena/target.js';
+import { DataSource } from '#@/data-source.ts';
+import { AthenaTarget, type AthenaTargetProps } from '#@/data-sources/athena/target.ts';
 
 /**
  * The Amazon Athena data source plugin (`grafana-athena-datasource`).

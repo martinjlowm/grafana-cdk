@@ -1,5 +1,5 @@
-import { DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.js';
-import type { AthenaDataSource } from '#@/data-sources/athena/data-source.js';
+import { DataSourceTarget, type DataSourceTargetProps } from '#@/data-source.ts';
+import type { AthenaDataSource } from '#@/data-sources/athena/data-source.ts';
 
 /**
  * How the plugin should shape the result set.

@@ -1,7 +1,7 @@
 import type { Construct } from 'constructs';
 
-import { DataSource } from '#@/data-source.js';
-import { ExpressionTarget, type ExpressionTargetProps } from '#@/data-sources/expression/target.js';
+import { DataSource } from '#@/data-source.ts';
+import { ExpressionTarget, type ExpressionTargetProps } from '#@/data-sources/expression/target.ts';
 
 /**
  * Grafana's built-in server-side expression data source.

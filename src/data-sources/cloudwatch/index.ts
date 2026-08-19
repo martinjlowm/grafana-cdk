@@ -1,2 +1,2 @@
-export * from '#@/data-sources/cloudwatch/data-source.js';
-export * from '#@/data-sources/cloudwatch/target.js';
+export * from '#@/data-sources/cloudwatch/data-source.ts';
+export * from '#@/data-sources/cloudwatch/target.ts';

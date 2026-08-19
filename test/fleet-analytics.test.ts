@@ -32,7 +32,7 @@ import {
   fixedColorOverride,
   thresholds,
   transformation,
-} from '#@/index.js';
+} from '#@/index.ts';
 
 /**
  * A realistic multi-panel dashboard over an Athena-backed data lake, modelled

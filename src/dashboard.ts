@@ -7,15 +7,15 @@ import {
 } from '@grafana/schema';
 import { Construct } from 'constructs';
 
-import { AnnotationQuery } from '#@/annotation-query.js';
-import { DashboardLink } from '#@/dashboard-link.js';
-import { GrafanaDataSource } from '#@/data-sources/grafana.js';
-import type { DurationString } from '#@/duration.js';
-import { GridLayout, type GridPosition } from '#@/grid-position.js';
-import type { AnyPanel } from '#@/panel.js';
-import { RowPanel } from '#@/row-panel.js';
-import { TimeRange, type TimeRangeProps } from '#@/time-range.js';
-import type { Variable } from '#@/variables.js';
+import { AnnotationQuery } from '#@/annotation-query.ts';
+import { DashboardLink } from '#@/dashboard-link.ts';
+import { GrafanaDataSource } from '#@/data-sources/grafana.ts';
+import type { DurationString } from '#@/duration.ts';
+import { GridLayout, type GridPosition } from '#@/grid-position.ts';
+import type { AnyPanel } from '#@/panel.ts';
+import { RowPanel } from '#@/row-panel.ts';
+import { TimeRange, type TimeRangeProps } from '#@/time-range.ts';
+import type { Variable } from '#@/variables.ts';
 
 /**
  * Schema version this package emits. Grafana migrates older dashboards on

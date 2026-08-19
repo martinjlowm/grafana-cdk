@@ -15,7 +15,7 @@ import {
   StatPanel,
   TextBoxVariable,
   VariableHide,
-} from '#@/index.js';
+} from '#@/index.ts';
 
 function board(props: Partial<DashboardProps> = {}): { app: App; dashboard: Dashboard } {
   const app = new App();
