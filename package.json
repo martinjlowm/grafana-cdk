@@ -6,7 +6,9 @@
   "engines": {
     "node": ">=24"
   },
-  "workspaces": ["docs/snippets"],
+  "workspaces": [
+    "docs/snippets"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/martinjlowm/grafana-cdk.git"
@@ -37,8 +39,8 @@
     "test": "bun test",
     "test:update": "bun test --update-snapshots",
     "typecheck": "tsc --noEmit && tsc -p test --noEmit && tsc -p docs/snippets --noEmit",
-    "lint": "biome check .",
-    "format": "biome check --write ."
+    "lint": "treefmt --ci",
+    "format": "treefmt"
   },
   "dependencies": {
     "@grafana/schema": "^11.4.0",
@@ -48,7 +50,6 @@
     "constructs": "^10.4.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.0",
     "@types/bun": "^1.2.0",
     "@types/node": "^24.0.0",
     "typescript": "^5.7.2"

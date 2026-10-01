@@ -109,7 +109,7 @@ is the script and test runner.
 just check        # lint, typecheck, test
 just test         # unit and snapshot tests
 just test-update  # re-record the snapshots
-just fmt          # treefmt: nix, shell, toml
+just fmt          # treefmt: nix, shell, toml, ts, json
 just docs         # regenerate the docs from docs/**/*.tpl.md
 ```
 

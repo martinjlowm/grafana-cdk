@@ -12,7 +12,7 @@ import { type DurationString, isDuration } from '#@/duration.ts';
 import { FieldConfig, type FieldConfigProps } from '#@/field-config.ts';
 import { GridPosition, type GridPositionProps } from '#@/grid-position.ts';
 import type { LibraryPanel } from '#@/library-panel.ts';
-import { type RelativeTimeString, isRelativeTime } from '#@/time-range.ts';
+import { isRelativeTime, type RelativeTimeString } from '#@/time-range.ts';
 
 /**
  * A panel-level time override. Grafana accepts both a relative marker

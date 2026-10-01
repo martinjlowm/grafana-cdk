@@ -10,8 +10,8 @@ import {
   Dashboard,
   ExpressionDataSource,
   StatPanel,
-  VizOrientation,
   thresholds,
+  VizOrientation,
 } from '#@/index.ts';
 
 /**

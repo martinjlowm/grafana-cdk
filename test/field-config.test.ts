@@ -2,16 +2,16 @@ import { describe, expect, it } from 'bun:test';
 
 import { duration, durationToMilliseconds, isDuration } from '#@/duration.ts';
 import {
-  DataTopic,
-  MappingType,
-  SpecialValueMatch,
-  ThresholdsMode,
   customTransformation,
+  DataTopic,
   fieldOverride,
   fixedColorOverride,
+  MappingType,
   rangeMap,
   regexMap,
+  SpecialValueMatch,
   specialValueMap,
+  ThresholdsMode,
   thresholds,
   transformation,
   valueMap,

@@ -1,4 +1,4 @@
-import { App, Dashboard, StatPanel, TimeRange, absoluteTime } from '@martinjlowm/grafana-cdk';
+import { App, absoluteTime, Dashboard, StatPanel, TimeRange } from '@martinjlowm/grafana-cdk';
 
 const app = new App();
 

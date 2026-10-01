@@ -84,9 +84,4 @@ in {
   # `devenv build outputs.dist` — the npm publish artifact (see the `publish`
   # script above). Kept here rather than in a flake so there is one entry point.
   outputs.dist = pkgs.callPackage ./nix/dist.nix {inherit nodejs;};
-
-  # Lint/format for TypeScript is biome, pinned in package.json and run via
-  # `yarn lint`. Deliberately NOT wired as a Nix git-hook or a treefmt formatter:
-  # nixpkgs ships a newer biome major than the one pinned here, and the two
-  # reject each other's config. Keep a single biome — the project-pinned one.
 }
