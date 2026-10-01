@@ -1,6 +1,5 @@
-import fs from 'node:fs';
-
 import { describe, expect, it } from 'bun:test';
+import fs from 'node:fs';
 
 /**
  * Guards the packaging invariants whose failure mode is invisible from inside a

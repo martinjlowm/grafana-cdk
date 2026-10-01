@@ -9,8 +9,8 @@ import {
   type ValueMappingResult,
 } from '@grafana/schema';
 
-export { MappingType, SpecialValueMatch };
 export type { RangeMap, RegexMap, SpecialValueMap, ValueMap, ValueMapping, ValueMappingResult };
+export { MappingType, SpecialValueMatch };
 
 /**
  * Builders for the four members of the `ValueMapping` union.

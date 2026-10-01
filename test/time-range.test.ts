@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'bun:test';
 
 import {
-  type RelativeTime,
-  type RelativeTimeString,
-  TimeRange,
   absoluteTime,
   isRelativeTime,
   parseRelativeTime,
+  type RelativeTime,
+  type RelativeTimeString,
   resolveTimeBoundary,
+  TimeRange,
 } from '#@/time-range.ts';
 
 describe('relative markup', () => {

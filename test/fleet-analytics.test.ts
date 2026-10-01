@@ -10,6 +10,8 @@ import {
   Dashboard,
   FieldColorModeId,
   FrameGeometrySourceMode,
+  fieldOverride,
+  fixedColorOverride,
   GeomapPanel,
   GeomapTooltipMode,
   GraphDrawStyle,
@@ -26,12 +28,10 @@ import {
   TablePanel,
   TimeSeriesPanel,
   TooltipDisplayMode,
-  VisibilityMode,
-  VizOrientation,
-  fieldOverride,
-  fixedColorOverride,
   thresholds,
   transformation,
+  VisibilityMode,
+  VizOrientation,
 } from '#@/index.ts';
 
 /**

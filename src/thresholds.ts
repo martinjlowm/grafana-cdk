@@ -1,7 +1,7 @@
 import { type Threshold, type ThresholdsConfig, ThresholdsMode } from '@grafana/schema';
 
-export { ThresholdsMode };
 export type { Threshold, ThresholdsConfig };
+export { ThresholdsMode };
 
 /**
  * A threshold step above the base. The base step is implicit — Grafana requires

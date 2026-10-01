@@ -1,10 +1,10 @@
 import {
   App,
   AthenaDataSource,
+  customTransformation,
   Dashboard,
   StatPanel,
   TablePanel,
-  customTransformation,
   transformation,
 } from '@martinjlowm/grafana-cdk';
 
